@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Павел Орехов — начинающий frontend-разработчик. Сайты-визитки, лендинги, простые интерфейсы на HTML, Sass и JavaScript.">
+  <meta name="author" content="Павел Орехов">
+  <title>Павел Орехов — frontend-разработчик</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header" data-header>
+    <a class="logo" href="#top" aria-label="На главную">
+      <span>ПО</span>
+      <small>Павел Орехов</small>
+    </a>
+
+    <nav class="nav" data-nav aria-label="Основная навигация">
+      <a href="#about">Обо мне</a>
+      <a href="#works">Работы</a>
+      <a href="#services">Услуги</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+
+    <button class="menu" data-menu type="button" aria-label="Открыть меню" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main id="top">
+    <section class="hero section">
+      <div class="hero__content reveal">
+        <p class="eyebrow">Frontend / HTML / Sass / JavaScript</p>
+        <h1>Делаю простые и понятные сайты без лишней сложности.</h1>
+        <p class="lead">
+          Меня зовут Павел Орехов. Мне <span data-age data-birth="2001-10-07">24</span>, программированием увлекаюсь с 2022 года, прохожу курсы HTML Academy и постепенно собираю своё портфолио на GitHub.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#contact">Заказать сайт</a>
+          <a class="btn btn--ghost" href="https://github.com/Paul1l" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+
+      <aside class="hero__card reveal" aria-label="Краткая информация">
+        <img src="https://github.com/Paul1l.png" alt="GitHub avatar Павла Орехова" class="avatar">
+        <div>
+          <p class="card-label">Сейчас</p>
+          <h2>Учусь, практикуюсь и беру несложные сайты.</h2>
+          <p>Лендинги, визитки, адаптивная верстка, формы заявки через почту или Telegram. Пока без сложного backend.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="strip reveal" aria-label="Ключевые навыки">
+      <span>HTML5</span>
+      <span>Sass / SCSS</span>
+      <span>JavaScript</span>
+      <span>Адаптив</span>
+      <span>GitHub Pages</span>
+      <span>HTML Academy</span>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="section-head reveal">
+        <p class="number">01</p>
+        <div>
+          <p class="eyebrow">Обо мне</p>
+          <h2>Я не обещаю «сайт уровня Apple за вечер». Я делаю аккуратно, понятно и по задаче.</h2>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <article class="text-card reveal">
+          <h3>Код и обучение</h3>
+          <p>
+            С 2022 года я изучаю frontend-разработку: HTML, CSS, Sass, JavaScript, структуру страниц и базовую логику интерфейсов. Курсы HTML Academy помогают держать дисциплину и писать код не просто «чтобы работало», а чтобы его можно было читать и править.
+          </p>
+        </article>
+
+        <article class="text-card reveal">
+          <h3>Спорт и характер</h3>
+          <p>
+            С шести лет занимался футболом и провёл в нём 11 лет. Это дало понимание командной работы, ответственности и привычку не бросать задачу после первой ошибки. Также ходил на карате и бокс; на соревнованиях по карате занимал 3 место.
+          </p>
+        </article>
+
+        <article class="text-card text-card--accent reveal">
+          <h3>Как я работаю</h3>
+          <p>
+            Сначала уточняю цель сайта, потом собираю структуру, делаю первый вариант, показываю результат и дорабатываю. Мне важно, чтобы сайт был не только красивым, но и удобным: понятные блоки, нормальный текст, адаптив под телефон и простая связь с клиентом.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section works" id="works">
+      <div class="section-head reveal">
+        <p class="number">02</p>
+        <div>
+          <p class="eyebrow">GitHub и практика</p>
+          <h2>Мои учебные и практические проекты.</h2>
+        </div>
+      </div>
+
+      <div class="work-list">
+        <article class="work-card reveal">
+          <div>
+            <p class="work-type">JavaScript practice</p>
+            <h3>the-Number</h3>
+            <p>Небольшой проект с логикой на JavaScript. Подходит как пример работы с интерактивностью, DOM и базовой структурой HTML/CSS/JS.</p>
+          </div>
+          <a href="https://github.com/Paul1l/the-Number" target="_blank" rel="noopener">Открыть</a>
+        </article>
+
+        <article class="work-card reveal">
+          <div>
+            <p class="work-type">JavaScript / game logic</p>
+            <h3>Dice</h3>
+            <p>Проект с игровой механикой: бросок кубика, изменение состояния и работа с событиями. Хороший пример простого JS без backend.</p>
+          </div>
+          <a href="https://github.com/Paul1l/-dice" target="_blank" rel="noopener">Открыть</a>
+        </article>
+
+        <article class="work-card reveal">
+          <div>
+            <p class="work-type">Layout / Sass</p>
+            <h3>Guitar</h3>
+            <p>Верстка с отдельной структурой папок, изображениями, CSS/Sass и небольшим JavaScript. Этот проект показывает работу с макетом и стилями.</p>
+          </div>
+          <a href="https://github.com/Paul1l/Guitar" target="_blank" rel="noopener">Открыть</a>
+        </article>
+
+        <article class="work-card reveal">
+          <div>
+            <p class="work-type">HTML / CSS</p>
+            <h3>TaskBakery</h3>
+            <p>Учебный проект на HTML и CSS. Подходит как пример аккуратной статической страницы и базовой структуры проекта.</p>
+          </div>
+          <a href="https://github.com/Paul1l/TaskBakery" target="_blank" rel="noopener">Открыть</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section services" id="services">
+      <div class="section-head reveal">
+        <p class="number">03</p>
+        <div>
+          <p class="eyebrow">Что можно заказать</p>
+          <h2>Пока беру простые сайты, где важны структура, аккуратность и понятная подача.</h2>
+        </div>
+      </div>
+
+      <div class="service-grid">
+        <article class="service-card reveal">
+          <span>01</span>
+          <h3>Сайт-визитка</h3>
+          <p>О себе, услугах, контактах, преимуществах, примерах работ. Хорошо подходит специалисту или небольшому проекту.</p>
+        </article>
+        <article class="service-card reveal">
+          <span>02</span>
+          <h3>Лендинг</h3>
+          <p>Одностраничный сайт под услугу, товар, мероприятие или портфолио. Блоки, кнопки, адаптив и форма заявки.</p>
+        </article>
+        <article class="service-card reveal">
+          <span>03</span>
+          <h3>Форма заявки</h3>
+          <p>Можно сделать отправку через почту, Telegram-ссылку или подготовить форму для будущего подключения backend.</p>
+        </article>
+      </div>
+
+      <div class="price-note reveal">
+        <p><em>Цена договорная</em> — зависит от объёма, количества блоков, текста, адаптива и правок.</p>
+      </div>
+    </section>
+
+    <section class="section rules" id="rules">
+      <div class="section-head reveal">
+        <p class="number">04</p>
+        <div>
+          <p class="eyebrow">Правила сайта</p>
+          <h2>Юридические блоки, которые лучше иметь на сайте в России.</h2>
+        </div>
+      </div>
+
+      <div class="rules-grid">
+        <article class="rule-card reveal">
+          <h3>Не публичная оферта</h3>
+          <p>Информация на сайте носит ознакомительный характер. Финальные условия, цена и сроки обсуждаются индивидуально.</p>
+        </article>
+        <article class="rule-card reveal">
+          <h3>Персональные данные</h3>
+          <p>Отправляя заявку, пользователь соглашается на обработку имени, контактов и сообщения только для ответа на обращение.</p>
+        </article>
+        <article class="rule-card reveal">
+          <h3>Cookies</h3>
+          <p>Сайт может использовать технические cookies для корректной работы. Сейчас аналитика и рекламные пиксели не подключены.</p>
+        </article>
+        <article class="rule-card reveal">
+          <h3>Авторские материалы</h3>
+          <p>Тексты, дизайн и элементы сайта нельзя копировать без согласования. Работы в портфолио указаны как примеры навыков.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="contact-box reveal">
+        <div class="contact-box__text">
+          <p class="eyebrow">Связаться</p>
+          <h2>Опишите задачу — я скажу, смогу ли взяться.</h2>
+          <p>Напишите, какой сайт нужен, сколько блоков примерно планируется, есть ли текст и примеры сайтов, которые нравятся.</p>
+          <div class="contact-links">
+            <a href="https://github.com/Paul1l" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://t.me/pauletolava1804" target="_blank" rel="noopener">Telegram</a>
+            <a href="mailto:pauletolava1804@gmail.com">Email</a>
+          </div>
+        </div>
+
+        <form class="form" data-form action="https://formsubmit.co/pauletolava1804@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Новая заявка с сайта-визитки Павла Орехова">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true">
+
+          <label>
+            Имя
+            <input type="text" name="name" placeholder="Ваше имя" required>
+          </label>
+          <label>
+            Контакт
+            <input type="text" name="contact" placeholder="Telegram или email" required>
+          </label>
+          <label class="wide">
+            Что нужно сделать?
+            <textarea name="message" rows="5" placeholder="Например: нужен сайт-визитка на 5 блоков, форма заявки, адаптив под телефон" required></textarea>
+          </label>
+          <label class="agree wide">
+            <input type="checkbox" name="agree" required>
+            <span>Согласен на обработку персональных данных для ответа на обращение.</span>
+          </label>
+
+          <div class="form-actions wide">
+            <button class="btn btn--primary" type="submit">Отправить на email</button>
+            <button class="btn btn--ghost" type="button" data-telegram>Написать в Telegram</button>
+          </div>
+
+          <p class="form-message wide" data-message aria-live="polite">Email-форма отправляет заявку на <strong>pauletolava1804@gmail.com</strong>. Telegram откроет чат <strong>@shra1d</strong>.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>made by pauletolava</p>
+    <p>© <span data-year></span> Павел Орехов. Информация на сайте не является публичной офертой.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
