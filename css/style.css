@@ -259,6 +259,13 @@ h3 {
   white-space: nowrap;
 }
 
+.work-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .service-card span {
   display: inline-block;
   color: #3758f9;
@@ -422,6 +429,9 @@ h3 {
   .work-card {
     grid-template-columns: 1fr;
   }
+  .work-links {
+    justify-content: flex-start;
+  }
   .form {
     grid-template-columns: 1fr;
   }
@@ -453,5 +463,3 @@ h3 {
 .form-message strong {
   color: white;
 }
-
-/*# sourceMappingURL=style.css.map */
