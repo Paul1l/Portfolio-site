@@ -103,7 +103,7 @@ telegramButton?.addEventListener('click', () => {
   }
 
   const text = `Здравствуйте! Меня зовут ${values.name}. Контакт: ${values.contact}. Задача: ${values.task}`;
-  const tgUrl = 'https://t.me/pauletolava1804';
+  const tgUrl = 'https://t.me/shra1d';
   const mailUrl = `mailto:pauletolava1804@gmail.com?subject=${encodeURIComponent('Заявка на сайт')}&body=${encodeURIComponent(text)}`;
 
   message.innerHTML = `Открываю Telegram. Если он не открылся, можно <a href="${tgUrl}" target="_blank" rel="noopener">перейти вручную</a> или <a href="${mailUrl}">отправить email</a>.`;

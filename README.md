@@ -14,7 +14,7 @@
 В форме есть два варианта связи:
 
 1. **Отправить на email** — форма отправляет заявку на `pauletolava1804@gmail.com` через FormSubmit.
-2. **Написать в Telegram** — открывает чат `@pauletolava1804`.
+2. **Написать в Telegram** — открывает чат `@shra1d`.
 
 Важно: при первой отправке через FormSubmit на почту придет письмо для подтверждения адреса. Нужно подтвердить его один раз, после этого заявки будут приходить на email.
 
@@ -41,7 +41,7 @@ npx sass scss/style.scss css/style.css
 ## Контакты
 
 - GitHub: https://github.com/Paul1l
-- Telegram: https://t.me/pauletolava1804
+- Telegram: https://t.me/shra1d
 - Email: pauletolava1804@gmail.com
 
 made by pauletolava
