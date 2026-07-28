@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://paul1l.github.io/Portfolio-site/sitemap.xml
