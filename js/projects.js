@@ -134,3 +134,116 @@ export const projects = [
     code: 'https://github.com/Paul1l/Apex-Select'
   }
 ];
+
+// Переводы хранятся рядом с данными, но отдельно от русской версии.
+// Благодаря этому исходные карточки остаются понятным вариантом по умолчанию.
+const projectTranslations = {
+  en: {
+    'mb-kuzbass': {
+      title: 'MB Kuzbass',
+      subtitle: 'Commercial Showcase for Auto Parts and Vehicles',
+      type: 'Commercial React SPA',
+      imageAlt: 'Hero section of the MB Kuzbass commercial website',
+      summary:
+        'A live website on its own domain: an auto parts catalog, auction vehicles, customer reviews, and quick ways to get in touch.',
+      challenge:
+        'The business covers three distinct lines: auto parts, vehicles from Japan, and supplies for dismantlers. They needed to work as one clear storefront without turning the page into an overloaded online shop.',
+      solution:
+        'I built a React SPA with internal catalog pages, a custom vehicle slider, enquiries through messaging apps, and separate analytics consent logic. I also prepared the SEO and PWA files, error pages, and a structure that can support future catalog growth.',
+      result:
+        'The website is live at mb-kuzbass.ru and serves as the company’s main digital storefront.',
+      role: 'Structure · UI · Frontend · Content · Launch'
+    },
+    'mpower-service': {
+      title: 'MPower Service',
+      subtitle: 'SPA for an Independent BMW Service Center',
+      type: 'React / Service Landing Page',
+      imageAlt: 'Dark interface of the MPower auto service website',
+      summary:
+        'A service landing page with strong typography, a clear booking flow, and a form that prepares an enquiry for Telegram.',
+      challenge:
+        'Present the service center’s technical expertise without the visual clutter common to automotive websites, and guide a customer from a symptom to a booking.',
+      solution:
+        'I built a component-based React interface, a responsive service grid, a four-step workflow, enquiry validation, and legal modal dialogs.',
+      result:
+        'A production-ready GitHub Pages build with SEO files and dedicated desktop and mobile layouts.',
+      role: 'UI · React Development · Responsive Design'
+    },
+    'fullstack-landing': {
+      title: 'REON Fullstack Landing',
+      subtitle: 'Form, Server-side APIs, and an AI Workflow',
+      type: 'Full-stack / Test Project',
+      imageAlt: 'Hero section of the REON full-stack landing page',
+      summary:
+        'A test project where the frontend works with server-side functions: email enquiries, validation, and an AI-generated task summary.',
+      challenge:
+        'Make the form functional rather than decorative and show the complete data flow—from browser validation to the server response and a clear interface state.',
+      solution:
+        'I separated the client and server logic, added a Vercel-compatible API, Resend for email, an AI endpoint, and dry-run modes for safe testing without secret keys.',
+      result:
+        'The project can be deployed to Vercel and tested locally with its built-in verification script.',
+      role: 'Frontend · API · Validation · Documentation'
+    },
+    techbearing: {
+      title: 'TechBearing',
+      subtitle: 'Technical Product Catalog',
+      type: 'Catalog / Vanilla JavaScript',
+      imageAlt: 'TechBearing catalog interface',
+      summary:
+        'A B2B/B2C catalog with filters, search, enquiries, and a demo admin area for managing products.',
+      challenge:
+        'Fit several groups of technical products into a fast static website and give users a convenient way to find the right item without a backend.',
+      solution:
+        'I built the catalog, search, and filters in vanilla JavaScript. To demonstrate data handling, I added enquiries, product management, and a localStorage-based admin area.',
+      result:
+        'A lightweight, dependency-free GitHub Pages project with legal pages and persisted user preferences.',
+      role: 'Structure · UI · JavaScript'
+    },
+    'lawyer-landing': {
+      title: 'Alexey Kazantsev',
+      subtitle: 'Landing Page for an Independent Lawyer',
+      type: 'Landing Page / Professional Services',
+      imageAlt: 'Hero section of Alexey Kazantsev’s legal services landing page',
+      summary:
+        'A calm, expert-led landing page covering legal practice, consultation, meeting preparation, FAQs, and legal documents.',
+      challenge:
+        'Build trust without loud promises while preserving a clear hierarchy across a large number of content sections.',
+      solution:
+        'I developed a responsive structure, light and dark themes, a booking flow, FAQs, cookie consent, and a complete set of technical SEO files.',
+      result:
+        'A publication-ready static website that is easy to hand over and maintain without a build tool.',
+      role: 'UI · Frontend Development · JavaScript · Responsive Design'
+    },
+    'apex-select': {
+      title: 'Apex Select',
+      subtitle: 'Editorial Watchlist for Rare Cars',
+      type: 'Editorial Interface / Concept',
+      imageAlt: 'Dark editorial interface of Apex Select',
+      summary:
+        'An English-language concept with distinctive art direction, vehicle filters, and a system of visual risk notes.',
+      challenge:
+        'Move away from a conventional vehicle catalog grid and create an interface that feels like a private working desk where documents and risks matter.',
+      solution:
+        'I built an asymmetric editorial grid, categories, scroll reveals, a mobile menu, and local brief validation in vanilla JavaScript.',
+      result:
+        'A standalone visual concept published on GitHub Pages without frameworks.',
+      role: 'Art Direction · UI · Frontend'
+    }
+  }
+};
+
+export function localizeProject(project, language = 'ru') {
+  if (!project) {
+    return null;
+  }
+
+  const normalizedLanguage = language.toLowerCase().split('-')[0];
+  const translation = projectTranslations[normalizedLanguage]?.[project.slug] ?? {};
+
+  return {
+    ...project,
+    ...translation,
+    categories: [...project.categories],
+    stack: [...project.stack]
+  };
+}

@@ -1,4 +1,5 @@
-import { projects } from './projects.js';
+import { createI18n } from './i18n.js';
+import { localizeProject, projects } from './projects.js';
 
 const header = document.querySelector('[data-header]');
 const menuButton = document.querySelector('[data-menu]');
@@ -13,13 +14,17 @@ const form = document.querySelector('[data-form]');
 const formStatus = document.querySelector('[data-form-status]');
 const toast = document.querySelector('[data-toast]');
 const mobileCta = document.querySelector('[data-mobile-cta]');
+const languageToggle = document.querySelector('[data-language-toggle]');
+const i18n = createI18n();
 
 let toastTimer;
+let toastMessageKey = '';
+let formStatusKey = '';
 
 function caseMarkup(project) {
   const liveButton = project.live
     ? `<a class="button button--accent" href="${project.live}" target="_blank" rel="noopener noreferrer">
-        Открыть сайт <span aria-hidden="true">↗</span>
+        ${i18n.t('openWebsite')} <span aria-hidden="true">↗</span>
       </a>`
     : '';
 
@@ -37,22 +42,22 @@ function caseMarkup(project) {
 
     <div class="case-details">
       <article>
-        <span>01 / Задача</span>
+        <span>${i18n.t('challenge')}</span>
         <p>${project.challenge}</p>
       </article>
       <article>
-        <span>02 / Решение</span>
+        <span>${i18n.t('solution')}</span>
         <p>${project.solution}</p>
       </article>
       <article>
-        <span>03 / Результат</span>
+        <span>${i18n.t('outcome')}</span>
         <p>${project.result}</p>
       </article>
     </div>
 
     <div class="case-footer">
       <div>
-        <p>Моя роль</p>
+        <p>${i18n.t('myRole')}</p>
         <strong>${project.role}</strong>
       </div>
       <div class="tag-list">
@@ -61,7 +66,7 @@ function caseMarkup(project) {
       <div class="case-footer__actions">
         ${liveButton}
         <a class="button button--outline" href="${project.code}" target="_blank" rel="noopener noreferrer">
-          Смотреть код <span aria-hidden="true">↗</span>
+          ${i18n.t('viewCode')} <span aria-hidden="true">↗</span>
         </a>
       </div>
     </div>
@@ -69,8 +74,9 @@ function caseMarkup(project) {
 }
 
 function openCase(slug, updateAddress = true) {
-  const project = projects.find((item) => item.slug === slug);
-  if (!project) return;
+  const sourceProject = projects.find((item) => item.slug === slug);
+  if (!sourceProject) return;
+  const project = localizeProject(sourceProject, i18n.language);
 
   caseContent.innerHTML = caseMarkup(project);
 
@@ -79,7 +85,9 @@ function openCase(slug, updateAddress = true) {
   }
 
   if (updateAddress && window.location.hash !== `#case/${slug}`) {
-    window.history.pushState({ case: slug }, '', `#case/${slug}`);
+    const url = new URL(window.location.href);
+    url.hash = `case/${encodeURIComponent(slug)}`;
+    window.history.pushState({ case: slug }, '', url.href);
   }
 }
 
@@ -89,7 +97,9 @@ function closeCase(updateAddress = true) {
   }
 
   if (updateAddress && window.location.hash.startsWith('#case/')) {
-    window.history.replaceState(null, '', '#work');
+    const url = new URL(window.location.href);
+    url.hash = 'work';
+    window.history.replaceState(null, '', url.href);
   }
 }
 
@@ -120,7 +130,10 @@ function initCases() {
     closeCase();
   });
 
-  window.addEventListener('popstate', syncCaseRoute);
+  window.addEventListener('popstate', () => {
+    i18n.syncFromAddress();
+    syncCaseRoute();
+  });
   syncCaseRoute();
 }
 
@@ -139,7 +152,7 @@ function initNavigation() {
     navigation.classList.toggle('is-open', isOpen);
     menuButton.classList.toggle('is-open', isOpen);
     menuButton.setAttribute('aria-expanded', String(isOpen));
-    menuButton.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+    menuButton.setAttribute('aria-label', i18n.t(isOpen ? 'menuClose' : 'menuOpen'));
     document.body.classList.toggle('menu-is-open', isOpen);
 
     if (isOpen) {
@@ -169,7 +182,11 @@ function initNavigation() {
 
     if (event.key !== 'Tab') return;
 
-    const focusable = [...navigation.querySelectorAll('a[href]'), menuButton];
+    const focusable = [
+      ...navigation.querySelectorAll('a[href]'),
+      languageToggle,
+      menuButton
+    ].filter((element) => element && !element.hidden);
     const first = focusable[0];
     const last = focusable.at(-1);
 
@@ -187,6 +204,7 @@ function initNavigation() {
   });
 
   window.addEventListener('scroll', updateScrollState, { passive: true });
+  setMenuState(false);
   updateScrollState();
 }
 
@@ -239,14 +257,21 @@ function initPointerEffects() {
   });
 }
 
-function showToast(message) {
+function showToast(messageKey) {
   window.clearTimeout(toastTimer);
-  toast.textContent = message;
+  toastMessageKey = messageKey;
+  toast.textContent = i18n.t(messageKey);
   toast.classList.add('is-visible');
 
   toastTimer = window.setTimeout(() => {
     toast.classList.remove('is-visible');
+    toastMessageKey = '';
   }, 4200);
+}
+
+function setFormStatus(messageKey = '') {
+  formStatusKey = messageKey;
+  formStatus.textContent = messageKey ? i18n.t(messageKey) : '';
 }
 
 function formValues() {
@@ -255,7 +280,7 @@ function formValues() {
   return {
     name: String(data.get('name') || '').trim(),
     contact: String(data.get('contact') || '').trim(),
-    format: String(data.get('format') || '').trim(),
+    format: form.elements.format.selectedOptions[0]?.textContent.trim() || '',
     task: String(data.get('message') || '').trim()
   };
 }
@@ -268,7 +293,7 @@ function initForm() {
     event.preventDefault();
 
     if (!form.reportValidity()) {
-      formStatus.textContent = 'Проверьте обязательные поля.';
+      setFormStatus('requiredFields');
       return;
     }
 
@@ -280,9 +305,11 @@ function initForm() {
       payload.set('email', contact);
     }
 
+    payload.set('format', form.elements.format.selectedOptions[0]?.textContent.trim() || '');
+
     submitButton.disabled = true;
     form.setAttribute('aria-busy', 'true');
-    formStatus.textContent = 'Отправляю заявку на email…';
+    setFormStatus('sending');
 
     try {
       const response = await fetch(endpoint, {
@@ -294,11 +321,11 @@ function initForm() {
       if (!response.ok) throw new Error('FormSubmit request failed');
 
       form.reset();
-      formStatus.textContent = 'Спасибо! Заявка отправлена — отвечу по указанному контакту.';
-      showToast('Заявка отправлена.');
+      setFormStatus('sent');
+      showToast('sentToast');
     } catch {
-      formStatus.textContent = 'Не получилось отправить форму. Напишите мне в Telegram или на email.';
-      showToast('Форма временно недоступна — контакты рядом.');
+      setFormStatus('sendError');
+      showToast('sendErrorToast');
     } finally {
       submitButton.disabled = false;
       form.removeAttribute('aria-busy');
@@ -307,28 +334,28 @@ function initForm() {
 
   telegramButton.addEventListener('click', async () => {
     if (!form.reportValidity()) {
-      formStatus.textContent = 'Сначала заполните обязательные поля.';
+      setFormStatus('fillFirst');
       return;
     }
 
     const values = formValues();
     const brief = [
-      'Здравствуйте! Хочу обсудить проект.',
-      `Имя: ${values.name}`,
-      `Контакт: ${values.contact}`,
-      `Формат: ${values.format}`,
-      `Задача: ${values.task}`
+      i18n.t('telegramGreeting'),
+      `${i18n.t('telegramName')}: ${values.name}`,
+      `${i18n.t('telegramContact')}: ${values.contact}`,
+      `${i18n.t('telegramFormat')}: ${values.format}`,
+      `${i18n.t('telegramTask')}: ${values.task}`
     ].join('\n');
 
     window.open('https://t.me/shra1d', '_blank', 'noopener,noreferrer');
 
     try {
       await navigator.clipboard.writeText(brief);
-      showToast('Описание скопировано. Вставьте его в Telegram.');
-      formStatus.textContent = 'Текст заявки скопирован — открываю Telegram.';
+      showToast('copiedToast');
+      setFormStatus('copiedStatus');
     } catch {
-      showToast('Открываю Telegram. Описание можно скопировать из формы.');
-      formStatus.textContent = 'Открываю Telegram.';
+      showToast('telegramFallbackToast');
+      setFormStatus('telegramFallbackStatus');
     }
   });
 }
@@ -376,6 +403,23 @@ function initPrivacyDialog() {
     if (event.target === privacyDialog) privacyDialog.close();
   });
 }
+
+i18n.subscribe(() => {
+  const menuIsOpen = navigation.classList.contains('is-open');
+  menuButton.setAttribute('aria-label', i18n.t(menuIsOpen ? 'menuClose' : 'menuOpen'));
+
+  if (caseDialog.open && window.location.hash.startsWith('#case/')) {
+    syncCaseRoute();
+  }
+
+  if (formStatusKey) {
+    formStatus.textContent = i18n.t(formStatusKey);
+  }
+
+  if (toastMessageKey && toast.classList.contains('is-visible')) {
+    toast.textContent = i18n.t(toastMessageKey);
+  }
+});
 
 initCases();
 initNavigation();
