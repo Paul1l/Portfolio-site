@@ -13,7 +13,7 @@
   --shell: 1440px;
   --pad: clamp(20px, 5vw, 64px);
   --header-h: 64px;
-  --head-h: clamp(300px, calc(100svh - 360px), 520px);
+  --head-h: clamp(320px, calc(100svh - 340px), 640px);
   --head-ratio: 0.7232; /* 392 / 542 — пропорции портрета */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -548,7 +548,7 @@ ul {
 }
 
 .greeting__caption {
-  min-height: calc(3 * 1.45em);
+  min-height: calc(2 * 1.45em);
   max-width: 24rem;
   color: var(--muted);
   font-size: 0.875rem;
@@ -628,6 +628,34 @@ ul {
   align-items: start;
   padding-block: clamp(28px, 4vw, 56px);
   border-bottom: 1px solid var(--line);
+}
+
+/* Стопка карточек при прокрутке (включает js/work-stack.js на подходящих экранах) */
+.project-list.is-stacked {
+  border-top: 0;
+  padding-bottom: 4vh;
+}
+
+.project-list.is-stacked .project {
+  position: sticky;
+  top: calc(var(--header-h) + 16px + var(--i, 0) * 10px);
+  margin-bottom: 22vh;
+  padding: clamp(20px, 2.6vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+  box-shadow: 0 -18px 40px rgba(0, 0, 0, 0.6);
+  transform-origin: 50% 0;
+  scale: calc(1 - var(--stack, 0) * 0.06);
+  filter: brightness(calc(1 - var(--stack, 0) * 0.55));
+}
+
+.project-list.is-stacked .project:last-child {
+  margin-bottom: 0;
+}
+
+.project-list.is-stacked .project__visual {
+  border-radius: 14px;
 }
 
 .project__visual {
@@ -1398,7 +1426,7 @@ ul {
 
 @media (max-width: 1023px) {
   :root {
-    --head-h: clamp(320px, 52svh, 460px);
+    --head-h: clamp(360px, 56svh, 560px);
   }
 
   .hero__grid {
@@ -1452,7 +1480,7 @@ ul {
 @media (max-width: 767px) {
   :root {
     --header-h: 60px;
-    --head-h: clamp(280px, 46svh, 360px);
+    --head-h: clamp(300px, 52svh, 420px);
   }
 
   html {
@@ -1632,5 +1660,11 @@ ul {
 @media (max-width: 359px) {
   .greeting__status {
     font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 399px) {
+  .greeting__caption {
+    min-height: calc(3 * 1.45em);
   }
 }
