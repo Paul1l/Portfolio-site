@@ -13,120 +13,89 @@ const english = {
   skipLink: 'Skip to content',
   brand: {
     aria: 'Pavel Orekhov — Home',
-    name: 'Pavel Orekhov<br><small>frontend developer</small>'
+    name: 'Pavel Orekhov'
   },
   nav: {
     aria: 'Main navigation',
-    cases: 'Case Studies',
+    work: 'Work',
     services: 'Services',
-    process: 'Process',
-    faq: 'FAQ',
-    about: 'About',
-    contact: 'Discuss a Project <span aria-hidden="true">↗</span>'
+    contact: 'Contact',
+    cta: 'Discuss a project <span aria-hidden="true">↗</span>'
   },
   hero: {
-    status: 'Frontend Developer · Available for Projects',
-    location: 'Barnaul · Remote',
-    title: 'Websites for business —<span class="hero__title-line">from first impression</span>to <em>enquiry.</em>',
-    lead: 'I shape the structure, build the interface and frontend, set up forms, responsive layouts, technical SEO, and deployment. Landing pages, catalogs, and React SPAs.',
-    note: 'No finished brief? That’s fine — we’ll start with the goal.',
-    primaryCta: 'Discuss Your Project <span aria-hidden="true">↗</span>',
-    caseCta: 'MB Kuzbass Case Study <span aria-hidden="true">↓</span>',
-    ownDomain: 'Live on Its Own Domain'
-  },
-  trust: {
-    aria: 'Why clients can trust the work',
-    live: 'Commercial website live on its own domain',
-    experience: 'Hands-on frontend development',
-    code: 'Project code available on GitHub',
-    context: 'Structure, frontend, and launch — one point of contact'
-  },
-  case: {
-    liveAria: 'Open the live MB Kuzbass website',
-    heroAlt: 'MB Kuzbass website homepage',
-    imageAlt: 'MB Kuzbass commercial website',
-    kicker: '01 / Commercial Case Study',
-    heading: 'One website.<br><em>Three lines of business.</em>',
-    intro: 'MB Kuzbass brings spare parts, vehicles from Japan, and supply for auto dismantlers together in one clear digital storefront.',
-    role: 'Structure · UI · Frontend · Launch',
-    eyebrow: 'Live on Its Own Domain',
-    title: 'MB Kuzbass',
-    lead: 'The business needed to present three distinct offers without the weight of a full ecommerce store, while giving visitors a direct route to the right information and contact.',
-    taskLabel: '01 / Challenge',
-    task: 'Bring the company’s services and product range into one clear structure.',
-    solutionLabel: '02 / Solution',
-    solution: 'A React SPA with a product catalog, a vehicle showcase, and direct contact flows.',
-    resultLabel: '03 / Outcome',
-    result: 'The company’s primary digital storefront is live and in use.',
-    openLive: 'View Live Website <span aria-hidden="true">↗</span>',
-    details: 'Explore Case Study'
+    kicker: 'Web development',
+    title: 'I build websites that work for&nbsp;you.',
+    portraitAlt: 'Portrait of Pavel Orekhov made of light dots',
+    lead: 'From idea to launch.<br> Websites and<br> web interfaces.',
+    worksCta: 'See my work <span aria-hidden="true">↗</span>',
+    index: '01 — Introduction',
+    scroll: 'Scroll down <span aria-hidden="true">↓</span>'
   },
   work: {
-    kicker: 'Selected Work',
-    heading: 'Different challenges.<br><em>Verifiable solutions.</em>',
-    intro: 'These three projects demonstrate work with React, server-side APIs, and product catalogs. Each one links to a live result or its source code.',
-    openWebsite: 'View Website <span aria-hidden="true">↗</span>',
-    openCode: 'View Code <span aria-hidden="true">↗</span>',
-    details: 'View Case Study'
+    kicker: '02 / Portfolio',
+    heading: 'Selected work',
+    intro: 'A live commercial website and projects you can open as a result or as source code.',
+    openWebsite: 'View website <span aria-hidden="true">↗</span>',
+    openCode: 'View code <span aria-hidden="true">↗</span>',
+    details: 'Case study',
+    moreTitle: 'More projects and archive',
+    site: 'Website <span aria-hidden="true">↗</span>',
+    code: 'Code <span aria-hidden="true">↗</span>'
   },
   projects: {
+    mbkuzbass: {
+      type: 'Commercial project · 2026',
+      title: 'MB Kuzbass',
+      subtitle: 'Storefront for auto parts and vehicles on its own domain',
+      summary: 'Three lines of business — auto parts, vehicles from Japan, and supply for dismantlers — brought together in one clear React SPA instead of an overloaded online shop.'
+    },
     mpower: {
-      role: 'UI · React · Responsive',
-      subtitle: 'SPA for an Independent BMW Service Center',
-      summary: 'A service landing page with a clear booking journey and a form that prepares an enquiry for Telegram.',
-      alt: 'Dark interface of the MPower service website',
-      aria: 'View the MPower Service case study'
+      subtitle: 'SPA for an independent BMW service center',
+      summary: 'A service landing page with a clear booking journey and a form that prepares an enquiry for Telegram.'
     },
     reon: {
-      type: 'Full-stack / Test Project',
-      role: 'Frontend · API · Validation',
-      subtitle: 'Form, Server-side APIs, and an AI Workflow',
-      summary: 'The interface connects to server-side functions: an email enquiry, validation, and an AI-generated task summary.',
-      alt: 'REON full-stack landing page homepage',
-      aria: 'View the REON Fullstack case study'
+      type: 'Full-stack / Test project · 2026',
+      subtitle: 'Form, server-side APIs, and an AI workflow',
+      summary: 'The interface connects to server-side functions: an email enquiry, validation, and an AI-generated task summary.'
     },
     techbearing: {
-      role: 'Structure · UI · JavaScript',
-      subtitle: 'Technical Product Catalog',
-      summary: 'A catalog with search, filters, enquiries, and a demo admin panel for managing products.',
-      alt: 'TechBearing catalog interface',
-      aria: 'View the TechBearing case study'
+      subtitle: 'Technical product catalog',
+      summary: 'A catalog with search, filters, enquiries, and a demo admin panel for managing products.'
+    },
+    lawyer: {
+      title: 'Alexey Kazantsev',
+      subtitle: 'Landing page for an independent lawyer · 2026'
+    },
+    apex: {
+      subtitle: 'Editorial concept for a rare-car watchlist · 2026'
     }
   },
+  history: {
+    guitarMeta: 'Early work: responsive Sass layout · 2024',
+    diceMeta: 'Early work: JavaScript game · 2024'
+  },
   services: {
-    kicker: '02 / Ways to Work Together',
-    heading: 'Right-sized for the job.<br><em>No unnecessary complexity.</em>',
-    intro: 'I don’t sell technology for its own sake. First, we define what the website needs to achieve. Then I choose a solution that is powerful enough without being overbuilt.',
-    scratchLabel: 'Website from Scratch',
+    kicker: '03 / Services',
+    heading: 'How I can help',
+    intro: 'First we define what the website needs to achieve. Then I choose a solution that is powerful enough without being overbuilt.',
+    scratchLabel: 'Website from scratch',
     scratchTitle: 'A landing page, service website, or catalog—from structure to launch.',
-    scratchText: 'I turn your business offer into a clear digital product: structure, visual direction, responsive interface, forms, and a solid SEO foundation.',
-    scratchCta: 'Discuss a Launch ↗',
+    scratchText: 'Structure, visual direction, responsive interface, forms, and a solid SEO foundation.',
     spaLabel: 'Catalog / React SPA',
     spaTitle: 'Interfaces with data, states, and user flows.',
-    spaText: 'Categories, search, filters, forms, internal screens, and API integrations—for projects that have outgrown a simple static page.',
-    spaCta: 'Discuss an Interface ↗',
-    designLabel: 'Development from a Design',
+    spaText: 'Categories, search, filters, forms, internal screens, and API integrations.',
+    designLabel: 'Development from a design',
     designTitle: 'Your design, turned into a responsive working website.',
-    designText: 'I preserve the visual idea while building component states, mobile layouts, interactions, and everything needed for launch.',
-    designCta: 'Share Your Design ↗',
-    improveLabel: 'Improvements and Growth',
+    designText: 'I preserve the visual idea and build component states, mobile layouts, and interactions.',
+    improveLabel: 'Improvements and growth',
     improveTitle: 'I can join an existing project.',
-    improveText: 'I’ll understand the current codebase and improve what is holding the site back: individual sections, the mobile experience, or new user flows.',
-    audit: 'Audit and fixes',
-    features: 'New sections and features',
-    refactor: 'Refactoring without rewriting for the sake of it',
-    improveCta: 'Discuss an Improvement ↗',
-    unsure: 'Not sure which option fits?',
-    callout: 'Describe the task in your own words—we can define the right scope after a quick review.',
-    calloutCta: 'Review My Project ↗'
+    improveText: 'Audit and fixes, new sections and features, refactoring without rewriting for the sake of it.'
   },
   process: {
-    kicker: '03 / Process',
-    heading: 'No black box.<br><em>Four clear stages.</em>',
-    intro: 'You always know what is happening, where the project stands, and what comes next.',
-    step1Title: 'Define the Challenge',
+    title: 'How the work goes',
+    step1Title: 'Define the challenge',
     step1Text: 'We clarify the goal, audience, offer, content, constraints, and the action visitors should take.',
-    step2Title: 'Set the Direction',
+    step2Title: 'Set the direction',
     step2Text: 'I shape the structure, visual system, and opening screen before full development begins.',
     step3Title: 'Build',
     step3Text: 'Responsive layouts, interactions, real form states, and testing across different screen sizes.',
@@ -134,36 +103,22 @@ const english = {
     step4Text: 'Final checks, deployment, and a clean, well-organized source handoff.'
   },
   about: {
-    kicker: '04 / Why Work With Me',
-    heading: 'A focused process, without the noise.<em>Built around your business and the details.</em>',
+    kicker: '04 / Approach',
+    heading: 'A focused process, without the noise',
     paragraph1: 'Clients care less about library names than a clear process, a careful launch, and a website they can continue working with. That is what I build the process around.',
     paragraph2: 'I have worked in frontend development since 2022. I keep the structure, visual system, frontend, and launch preparation in one context, so decisions do not get lost between multiple specialists.',
     personal: 'Before development, I spent many years playing football. It taught me to keep the pace, work as part of a team, and see every play through.',
-    githubCta: 'Review My Code on GitHub <span aria-hidden="true">↗</span>',
-    purposeTitle: 'Purpose First',
+    githubCta: 'Review my code on GitHub <span aria-hidden="true">↗</span>',
+    purposeTitle: 'Purpose first',
     purposeText: 'I clarify what visitors need to understand and what action the website should lead them to.',
-    technologyTitle: 'Right-sized Technology',
+    technologyTitle: 'Right-sized technology',
     technologyText: 'I use React when it solves the problem—not simply to make the stack sound impressive.',
-    proofTitle: 'Work You Can Verify',
+    proofTitle: 'Work you can verify',
     proofText: 'There is a live commercial website, published projects, and open source code.'
   },
-  history: {
-    kicker: 'Archive / 2024',
-    title: 'The early work stays in the archive.',
-    text: 'These projects show where the journey began. The commercial case study and recent work are the best reflection of my current level.',
-    guitarMeta: 'HTML · Sass · Responsive Layout',
-    guitarRepoAria: 'Open the Guitar repository',
-    guitarCodeAria: 'View the Guitar project code',
-    guitarImageAlt: 'Early Guitar landing page',
-    diceMeta: 'JavaScript · DOM · Game Logic',
-    diceOpenAria: 'Open the Dice game',
-    diceCodeAria: 'View the Dice project code',
-    diceImageAlt: 'Dice JavaScript game interface'
-  },
   faq: {
-    kicker: '05 / FAQ',
-    heading: 'A few things worth<br><em>clarifying before we start.</em>',
-    intro: 'If your question is not covered here, send it through Telegram or the short brief below.',
+    kicker: '05 / Questions',
+    heading: 'A few things worth clarifying before we start',
     item1Question: 'Can I get in touch without a finished brief?',
     item1Answer: 'Yes. Tell me about the business, the audience, and what the website needs to achieve. I’ll ask a few focused questions and help turn the requirements into a clear structure.',
     item2Question: 'What if I don’t have a design or finished copy?',
@@ -180,10 +135,11 @@ const english = {
     item7Answer: 'Enquiry volume depends on more than the website—it is also shaped by the offer, traffic, and sales process. My role is to communicate the value clearly and make the path to contact easy.'
   },
   contact: {
-    kicker: '06 / New Project',
-    heading: 'Need a website that helps people<br><em>take the next step?</em>',
+    kicker: '06 / Contact',
+    heading: 'Need a website that helps people take the next step?',
     intro: 'Tell me what the business does, what you already have, and what action visitors should take. There is no need to prepare a long technical brief.',
-    directQuestion: 'Prefer to start with a short message?',
+    cta: 'Discuss a project <span aria-hidden="true">↗</span>',
+    formTitle: 'Or send a short brief',
     emailSubject: 'New Portfolio Enquiry for Pavel Orekhov',
     nameLabel: 'How should I address you?',
     namePlaceholder: 'Your name',
@@ -195,11 +151,11 @@ const english = {
     formatCatalog: 'Catalog or React SPA',
     formatDesign: 'Development from a design',
     formatImprovement: 'Website improvements',
-    projectLabel: 'About the Project',
-    projectPlaceholder: 'What does the business do? What do you already have? What should visitors do on the website? Do you have any materials or a preferred timeline?',
+    projectLabel: 'About the project',
+    projectPlaceholder: 'What does the business do? What do you already have? What should visitors do on the website?',
     consent: 'I agree to the use of my data for responding to this enquiry.',
     consentDetails: 'Details',
-    submit: 'Discuss the Project <span aria-hidden="true">↗</span>',
+    submit: 'Send enquiry <span aria-hidden="true">↗</span>',
     telegram: 'Continue in Telegram',
     privacyNote: 'Your contact details are used only to reply about the project. No newsletters.'
   },
@@ -251,7 +207,23 @@ const runtime = {
     copiedToast: 'Описание скопировано. Вставьте его в Telegram.',
     copiedStatus: 'Текст заявки скопирован — открываю Telegram.',
     telegramFallbackToast: 'Открываю Telegram. Описание можно скопировать из формы.',
-    telegramFallbackStatus: 'Открываю Telegram.'
+    telegramFallbackStatus: 'Открываю Telegram.',
+    fieldEmpty: 'Заполните это поле.',
+    contactInvalid: 'Укажите email, @username в Telegram или телефон.',
+    greetingIdle: 'Давайте познакомимся',
+    greetingLoading: 'Подключаю голос…',
+    greetingSpeaking: 'Приветствие',
+    greetingSpeakingTts: 'Озвучивает синтезатор браузера',
+    greetingStopped: 'Приветствие остановлено',
+    greetingEnded: 'Приветствие завершено',
+    greetingNoVoice: 'Голос недоступен — приветствие текстом',
+    greetingAudioError: 'Звук не включился — приветствие текстом',
+    greetingCaption: 'Можно и без звука',
+    greetingButton: {
+      play: 'Включить приветствие',
+      stop: 'Остановить',
+      replay: 'Повторить приветствие'
+    }
   },
   en: {
     menuOpen: 'Open menu',
@@ -279,7 +251,23 @@ const runtime = {
     copiedToast: 'The project details were copied. Paste them into Telegram.',
     copiedStatus: 'The project details were copied—opening Telegram.',
     telegramFallbackToast: 'Opening Telegram. You can copy the details from the form.',
-    telegramFallbackStatus: 'Opening Telegram.'
+    telegramFallbackStatus: 'Opening Telegram.',
+    fieldEmpty: 'Please fill in this field.',
+    contactInvalid: 'Enter an email, a Telegram @username, or a phone number.',
+    greetingIdle: 'Let’s get acquainted',
+    greetingLoading: 'Preparing the voice…',
+    greetingSpeaking: 'Greeting',
+    greetingSpeakingTts: 'Voiced by the browser’s speech synthesizer',
+    greetingStopped: 'Greeting stopped',
+    greetingEnded: 'Greeting finished',
+    greetingNoVoice: 'Voice unavailable — greeting as text',
+    greetingAudioError: 'Sound didn’t start — greeting as text',
+    greetingCaption: 'Works without sound, too',
+    greetingButton: {
+      play: 'Play greeting',
+      stop: 'Stop',
+      replay: 'Replay greeting'
+    }
   }
 };
 
