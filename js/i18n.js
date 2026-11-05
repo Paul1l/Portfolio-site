@@ -34,10 +34,12 @@ const english = {
   work: {
     kicker: '02 / Portfolio',
     heading: 'Selected work',
-    intro: 'A live commercial website and projects you can open as a result or as source code.',
+    intro: 'Commercial websites, client projects, and concepts — each one can be opened and explored.',
     openWebsite: 'View website <span aria-hidden="true">↗</span>',
     openCode: 'View code <span aria-hidden="true">↗</span>',
     details: 'Case study',
+    githubCopy: 'GitHub Pages copy <span aria-hidden="true">↗</span>',
+    openConcept: 'View concept <span aria-hidden="true">↗</span>',
     moreTitle: 'More projects and archive',
     site: 'Website <span aria-hidden="true">↗</span>',
     code: 'Code <span aria-hidden="true">↗</span>'
@@ -48,6 +50,28 @@ const english = {
       title: 'MB Kuzbass',
       subtitle: 'Storefront for auto parts and vehicles on its own domain',
       summary: 'Three lines of business — auto parts, vehicles from Japan, and supply for dismantlers — brought together in one clear React SPA instead of an overloaded online shop.'
+    },
+    meatwash: {
+      type: 'Commercial project · 2026',
+      subtitle: 'Website for a Moscow car wash and detailing studio network',
+      summary: 'Services and prices by body type, online booking at one of two studios, before-and-after comparisons, and a 3D service garage built with three.js that loads only on request.'
+    },
+    kirpich: {
+      type: 'Client project · demo · 2026',
+      title: 'Kirpichny Trest',
+      subtitle: 'Website for a building materials and services supplier',
+      summary: '10 material categories and 4 services, each with its own page. On the homepage, a house assembles on scroll from the materials the company sells.'
+    },
+    smesi: {
+      type: 'Client project · demo · 2026',
+      title: 'Dry Mixes',
+      subtitle: 'Dry building mix catalog for Kirpichny Trest',
+      summary: '134 products from Perel, Dauer, Osnovit, and other manufacturers with prices and specifications, plus a task-based finder. In the hero, a particle cloud assembles into a 3D package showcase.'
+    },
+    profit: {
+      type: 'Concept · 2026',
+      subtitle: 'Homepage concept for a marketing agency',
+      summary: 'A personal redesign concept: the hero video scrubs with scrolling, a 3D variant uses a depth map, plus animated service cards and a case carousel. Contacts and cases in the mockup are placeholders.'
     },
     mpower: {
       subtitle: 'SPA for an independent BMW service center',
@@ -351,6 +375,7 @@ function createSchemaController() {
       const projectList = JSON.parse(projectsSource);
       const descriptions = [
         'A commercial React SPA showcasing spare parts and vehicles.',
+        'A website for a Moscow car wash and detailing studio network with online booking and a 3D service garage.',
         'A React SPA for an independent BMW service center.',
         'A full-stack project with server-side APIs, an email enquiry flow, and an AI workflow.',
         'A technical product catalog built with vanilla JavaScript.'

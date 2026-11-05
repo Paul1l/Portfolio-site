@@ -28,6 +28,13 @@ function caseMarkup(project) {
       </a>`
     : '';
 
+  // Код показываем только там, где репозиторий открыт и принадлежит мне.
+  const codeButton = project.code
+    ? `<a class="button button--outline" href="${project.code}" target="_blank" rel="noopener noreferrer">
+        ${i18n.t('viewCode')} <span aria-hidden="true">↗</span>
+      </a>`
+    : '';
+
   return `
     <div class="case-hero">
       <div class="case-hero__copy">
@@ -65,9 +72,7 @@ function caseMarkup(project) {
       </div>
       <div class="case-footer__actions">
         ${liveButton}
-        <a class="button button--outline" href="${project.code}" target="_blank" rel="noopener noreferrer">
-          ${i18n.t('viewCode')} <span aria-hidden="true">↗</span>
-        </a>
+        ${codeButton}
       </div>
     </div>
   `;
