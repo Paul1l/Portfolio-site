@@ -630,32 +630,159 @@ ul {
   border-bottom: 1px solid var(--line);
 }
 
-/* Стопка карточек при прокрутке (включает js/work-stack.js на подходящих экранах) */
-.project-list.is-stacked {
-  border-top: 0;
-  padding-bottom: 4vh;
+/* Колода работ (js/work-deck.js, экраны от 768 px): превью стоят стопкой на ребре,
+   при прокрутке передняя карточка опрокидывается вперёд «на пол». */
+.work-deck {
+  display: none;
 }
 
-.project-list.is-stacked .project {
+.work-showcase.is-deck {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+
+.work-showcase.is-deck .work-deck {
   position: sticky;
-  top: calc(var(--header-h) + 16px + var(--i, 0) * 10px);
-  margin-bottom: 22vh;
-  padding: clamp(20px, 2.6vw, 36px);
+  top: var(--header-h);
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  height: calc(100svh - var(--header-h));
+}
+
+.work-deck__stage {
+  position: relative;
+  width: min(100%, calc((100svh - var(--header-h) - 120px) * 16 / 15));
+  margin-inline: auto;
+  aspect-ratio: 16 / 15;
+  perspective: 1500px;
+  perspective-origin: 50% -10%;
+  cursor: pointer;
+}
+
+.work-deck__card {
+  position: absolute;
+  top: 16%;
+  right: 3%;
+  left: 3%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 6px;
   background: var(--surface);
-  box-shadow: 0 -18px 40px rgba(0, 0, 0, 0.6);
-  transform-origin: 50% 0;
-  scale: calc(1 - var(--stack, 0) * 0.06);
-  filter: brightness(calc(1 - var(--stack, 0) * 0.55));
+  transform-origin: 50% 100%;
+  pointer-events: none; /* клики принимает сцена; упавшая карточка не перекрывает кнопки */
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.25, 1), opacity 0.5s ease;
 }
 
-.project-list.is-stacked .project:last-child {
-  margin-bottom: 0;
+/* Затемнение задних и упавших карточек — только оттенками фона, без цвета. */
+.work-deck__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: var(--shade, 0);
+  pointer-events: none;
+  transition: opacity 0.6s ease;
 }
 
-.project-list.is-stacked .project__visual {
-  border-radius: 14px;
+.work-deck__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(1);
+  transition: filter 0.6s ease;
+}
+
+.work-deck__card.is-front {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.work-deck__card.is-front img {
+  filter: none;
+}
+
+/* Невидимые карточки не рисуем вовсе (после того как они плавно погасли). */
+.work-deck__card.is-hidden {
+  visibility: hidden;
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.25, 1), opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+/* Карточка «на полу» лежит вверх ногами: к зрителю (верх картинки) уходит в фон. */
+.work-deck__card.is-fallen::after {
+  background: linear-gradient(to bottom, var(--bg) 8%, rgba(5, 5, 5, 0.55) 100%);
+  opacity: 1;
+}
+
+.work-deck__controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.work-deck__button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.05rem;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.work-deck__button:hover:not(:disabled) {
+  border-color: var(--text);
+}
+
+.work-deck__button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.work-deck__counter {
+  min-width: 7ch;
+  color: var(--muted);
+  font-size: 0.875rem;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+.work-deck__counter span:first-child {
+  color: var(--text);
+}
+
+/* Описания работ рядом с колодой: активное — ярко, остальные приглушены. */
+.work-showcase.is-deck .project-list {
+  border-top: 0;
+}
+
+.work-showcase.is-deck .project {
+  display: flex;
+  align-items: center;
+  min-height: 64svh;
+  padding-block: 0;
+  border-bottom: 0;
+  transition: opacity 0.5s ease;
+}
+
+.work-showcase.is-deck .project:not(.is-active) {
+  opacity: 0.28;
+}
+
+.work-showcase.is-deck .project__visual {
+  display: none;
 }
 
 .project__visual {
@@ -1459,6 +1586,10 @@ ul {
   }
 
   .project {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .work-showcase.is-deck {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
