@@ -2,6 +2,7 @@ import { createI18n } from './i18n.js';
 import { localizeProject, projects } from './projects.js';
 import { createGreeting } from './greeting.js';
 import { createParticleHead } from './head-particles.js';
+import { initWorkStack } from './work-stack.js';
 
 const header = document.querySelector('[data-header]');
 const menuButton = document.querySelector('[data-menu]');
@@ -473,6 +474,7 @@ const greeting = initHero();
 initCases();
 initNavigation();
 initReveal();
+initWorkStack(document.querySelector('.project-list'));
 initForm();
 initMobileCta();
 initPrivacyDialog();
