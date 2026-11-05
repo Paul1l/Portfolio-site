@@ -2,7 +2,7 @@ import { createI18n } from './i18n.js';
 import { localizeProject, projects } from './projects.js';
 import { createGreeting } from './greeting.js';
 import { createParticleHead } from './head-particles.js';
-import { initWorkStack } from './work-stack.js';
+import { initWorkDeck } from './work-deck.js';
 
 const header = document.querySelector('[data-header]');
 const menuButton = document.querySelector('[data-menu]');
@@ -452,6 +452,7 @@ function initPrivacyDialog() {
 
 i18n.subscribe(() => {
   greeting?.refresh();
+  workDeck?.relabel();
 
   const menuIsOpen = navigation.classList.contains('is-open');
   menuButton.setAttribute('aria-label', i18n.t(menuIsOpen ? 'menuClose' : 'menuOpen'));
@@ -474,7 +475,7 @@ const greeting = initHero();
 initCases();
 initNavigation();
 initReveal();
-initWorkStack(document.querySelector('.project-list'));
+const workDeck = initWorkDeck(document.querySelector('.project-list'), { t: (key) => i18n.t(key) });
 initForm();
 initMobileCta();
 initPrivacyDialog();
