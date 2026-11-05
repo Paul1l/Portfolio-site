@@ -1,11 +1,11 @@
 import { createI18n } from './i18n.js';
 import { localizeProject, projects } from './projects.js';
+import { createGreeting } from './greeting.js';
+import { createParticleHead } from './head-particles.js';
 
 const header = document.querySelector('[data-header]');
 const menuButton = document.querySelector('[data-menu]');
 const navigation = document.querySelector('[data-nav]');
-const progress = document.querySelector('[data-progress]');
-const glow = document.querySelector('[data-glow]');
 const caseDialog = document.querySelector('[data-case-dialog]');
 const caseContent = document.querySelector('[data-case-content]');
 const caseCloseButton = document.querySelector('[data-case-close]');
@@ -138,15 +138,11 @@ function initCases() {
 }
 
 function updateScrollState() {
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-  const value = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-
   header.classList.toggle('is-scrolled', window.scrollY > 20);
-  progress.style.transform = `scaleX(${value})`;
 }
 
 function initNavigation() {
-  const desktopQuery = window.matchMedia('(min-width: 901px)');
+  const desktopQuery = window.matchMedia('(min-width: 768px)');
 
   function setMenuState(isOpen, restoreFocus = false) {
     navigation.classList.toggle('is-open', isOpen);
@@ -169,6 +165,10 @@ function initNavigation() {
   navigation.addEventListener('click', (event) => {
     if (!event.target.closest('a')) return;
     setMenuState(false);
+  });
+
+  header.querySelector('.brand')?.addEventListener('click', () => {
+    if (navigation.classList.contains('is-open')) setMenuState(false);
   });
 
   document.addEventListener('keydown', (event) => {
@@ -224,37 +224,36 @@ function initReveal() {
       observer.unobserve(entry.target);
     });
   }, {
-    threshold: 0.12,
+    // Порог 0: высокие блоки (FAQ, форма) появляются, как только край вошёл в экран.
+    threshold: 0,
     rootMargin: '0px 0px -40px'
   });
 
   items.forEach((item) => observer.observe(item));
+
+  // Фокус с клавиатуры никогда не должен попадать в ещё невидимый блок.
+  document.addEventListener('focusin', (event) => {
+    const item = event.target.closest?.('.reveal');
+    if (!item || item.classList.contains('is-visible')) return;
+    item.classList.add('is-visible');
+    observer.unobserve(item);
+  });
 }
 
-function initPointerEffects() {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reducedMotion || !window.matchMedia('(pointer: fine)').matches) return;
-
-  window.addEventListener('pointermove', (event) => {
-    glow.style.setProperty('--x', `${event.clientX}px`);
-    glow.style.setProperty('--y', `${event.clientY}px`);
-  }, { passive: true });
-
-  document.querySelectorAll('[data-tilt]').forEach((item) => {
-    item.addEventListener('pointermove', (event) => {
-      const bounds = item.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-
-      item.style.setProperty('--rotate-x', `${y * -4}deg`);
-      item.style.setProperty('--rotate-y', `${x * 5}deg`);
-    });
-
-    item.addEventListener('pointerleave', () => {
-      item.style.removeProperty('--rotate-x');
-      item.style.removeProperty('--rotate-y');
-    });
+function initHero() {
+  const greeting = createGreeting({
+    root: document.querySelector('[data-greeting]'),
+    t: (key) => i18n.t(key),
+    getLanguage: () => i18n.language
   });
+
+  createParticleHead({
+    figure: document.querySelector('[data-head]'),
+    poster: document.querySelector('[data-head-poster]'),
+    getLevel: (dt) => greeting?.getLevel(dt) ?? 0
+  });
+
+  return greeting;
 }
 
 function showToast(messageKey) {
@@ -285,14 +284,41 @@ function formValues() {
   };
 }
 
+const CONTACT_PATTERN = /^(?:[^\s@]+@[^\s@]+\.[^\s@]+|@?[A-Za-z0-9_]{4,32}|(?:https?:\/\/)?t\.me\/[A-Za-z0-9_]{4,32}|\+?[\d\s()-]{7,20})$/;
+
+// Проверка полей с учётом пробелов: «   » не считается заполненным полем,
+// а контакт должен быть похож на email, @username, ссылку t.me или телефон.
+function validateForm() {
+  const { name, contact, message } = form.elements;
+
+  [name, contact, message].forEach((field) => {
+    field.setCustomValidity(field.value.trim() ? '' : i18n.t('fieldEmpty'));
+  });
+
+  if (contact.value.trim() && !CONTACT_PATTERN.test(contact.value.trim())) {
+    contact.setCustomValidity(i18n.t('contactInvalid'));
+  }
+
+  return form.reportValidity();
+}
+
 function initForm() {
   const telegramButton = form.querySelector('[data-telegram]');
   const submitButton = form.querySelector('[type="submit"]');
 
+  // Валидацию берём на себя (с JS), чтобы статус формы всегда был актуальным.
+  // Без JS остаётся встроенная проверка браузера.
+  form.noValidate = true;
+
+  form.addEventListener('input', (event) => {
+    if (event.target.setCustomValidity) event.target.setCustomValidity('');
+    if (formStatusKey === 'sent' || formStatusKey === 'requiredFields') setFormStatus('');
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    if (!form.reportValidity()) {
+    if (!validateForm()) {
       setFormStatus('requiredFields');
       return;
     }
@@ -307,6 +333,7 @@ function initForm() {
 
     payload.set('format', form.elements.format.selectedOptions[0]?.textContent.trim() || '');
 
+    const hadFocus = document.activeElement === submitButton;
     submitButton.disabled = true;
     form.setAttribute('aria-busy', 'true');
     setFormStatus('sending');
@@ -318,7 +345,12 @@ function initForm() {
         headers: { Accept: 'application/json' }
       });
 
-      if (!response.ok) throw new Error('FormSubmit request failed');
+      // FormSubmit может ответить 200 и при отказе (например, форма не активирована),
+      // поэтому успехом считаем только явный success: true.
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || String(result.success) !== 'true') {
+        throw new Error('FormSubmit request failed');
+      }
 
       form.reset();
       setFormStatus('sent');
@@ -329,11 +361,14 @@ function initForm() {
     } finally {
       submitButton.disabled = false;
       form.removeAttribute('aria-busy');
+      if (hadFocus && (document.activeElement === document.body || !document.activeElement)) {
+        submitButton.focus();
+      }
     }
   });
 
   telegramButton.addEventListener('click', async () => {
-    if (!form.reportValidity()) {
+    if (!validateForm()) {
       setFormStatus('fillFirst');
       return;
     }
@@ -347,10 +382,15 @@ function initForm() {
       `${i18n.t('telegramTask')}: ${values.task}`
     ].join('\n');
 
+    // Копирование начинаем до открытия вкладки: новая вкладка забирает фокус,
+    // и после этого браузер может отказать в доступе к буферу обмена.
+    const copying = navigator.clipboard
+      ? navigator.clipboard.writeText(brief)
+      : Promise.reject(new Error('Clipboard API unavailable'));
     window.open('https://t.me/shra1d', '_blank', 'noopener,noreferrer');
 
     try {
-      await navigator.clipboard.writeText(brief);
+      await copying;
       showToast('copiedToast');
       setFormStatus('copiedStatus');
     } catch {
@@ -405,6 +445,8 @@ function initPrivacyDialog() {
 }
 
 i18n.subscribe(() => {
+  greeting?.refresh();
+
   const menuIsOpen = navigation.classList.contains('is-open');
   menuButton.setAttribute('aria-label', i18n.t(menuIsOpen ? 'menuClose' : 'menuOpen'));
 
@@ -421,10 +463,11 @@ i18n.subscribe(() => {
   }
 });
 
+const greeting = initHero();
+
 initCases();
 initNavigation();
 initReveal();
-initPointerEffects();
 initForm();
 initMobileCta();
 initPrivacyDialog();
