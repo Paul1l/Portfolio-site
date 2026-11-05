@@ -1,9 +1,11 @@
 // Голова из частиц (WebGL, без зависимостей).
 //
-// Это честный 2.5D-эффект: координаты частиц берутся из яркости пикселей
-// одобренного портрета, а глубина — художественная: форма головы плюс рельеф
-// лица (нос, глазницы, губы, подбородок). Настоящей геометрии у изображения нет,
-// поэтому угол поворота ограничен — так сохраняется сходство.
+// Лицо — точки одобренного портрета (яркость пикселей → частицы). Чтобы голова
+// поворачивалась как объём, у неё есть художественная 3D-форма: профиль по
+// силуэту портрета, рельеф лица (нос, глазницы, губы, подбородок) и тыльная
+// сторона из точек (бока, затылок, макушка). Каждая точка знает свою нормаль:
+// при повороте дальняя сторона гаснет, ближняя выходит вперёд — силуэт меняется.
+// Это не 3D-реконструкция: геометрии у картинки нет, форма придумана по контуру.
 //
 // Вся анимация считается в вершинном шейдере: на каждом кадре JS меняет
 // только несколько uniform-значений и не создаёт новых объектов.
@@ -13,9 +15,13 @@ const ASSEMBLE_SECONDS = 2.2;
 const PORTRAIT_POINTS = 15000;
 // Доля бюджета на самые светлые точки; остальное — тусклая текстура кожи.
 const BRIGHT_SHARE = 0.78;
+// Доля бюджета на тыльную сторону головы (бока, затылок) — видна только при повороте.
+const BACK_SHARE = 0.18;
 // Голова поворачивается к курсору, как портрет, который «смотрит на тебя».
-const MAX_YAW = 0.26; // ≈15°
-const MAX_PITCH = 0.16; // ≈9°
+const MAX_YAW = 0.5; // ≈29°
+const MAX_PITCH = 0.26; // ≈15°
+// Кивок — вокруг шеи (ниже центра головы), поворот вбок — вокруг вертикальной оси головы.
+const PITCH_PIVOT_Y = -0.45;
 // На каком расстоянии от головы (px) поворот почти достигает максимума.
 const LOOK_DISTANCE = 420;
 // Насколько зрачки дополнительно сдвигаются в сторону курсора (в долях полувысоты).
@@ -26,6 +32,7 @@ attribute vec3 aTarget;
 attribute vec3 aScatter;
 attribute vec4 aSeed;
 attribute float aEye;
+attribute vec4 aNormal; // xyz — нормаль поверхности, w: 0 — лицо (портрет), 1 — тыльная сторона
 
 uniform float uTime;
 uniform float uAssemble;
@@ -61,22 +68,35 @@ void main() {
   // Взгляд: зрачки чуть смещаются в сторону курсора.
   p.xy += aEye * uGaze * ${GAZE_SHIFT.toFixed(4)};
 
-  // Поворот головы вокруг её центра (ось проходит внутри головы, за лицом).
+  // Поворот головы: вбок — вокруг вертикальной оси через центр головы,
+  // кивок — вокруг шеи. Нормаль поворачивается вместе с точкой.
   float cy = cos(uRotation.x);
   float sy = sin(uRotation.x);
   float cx = cos(uRotation.y);
   float sx = sin(uRotation.y);
+  vec3 n = aNormal.xyz;
   p = vec3(cy * p.x + sy * p.z, p.y, -sy * p.x + cy * p.z);
+  n = vec3(cy * n.x + sy * n.z, n.y, -sy * n.x + cy * n.z);
+  p.y -= ${PITCH_PIVOT_Y.toFixed(3)};
   p = vec3(p.x, cx * p.y - sx * p.z, sx * p.y + cx * p.z);
+  p.y += ${PITCH_PIVOT_Y.toFixed(3)};
+  n = vec3(n.x, cx * n.y - sx * n.z, sx * n.y + cx * n.z);
 
-  // Перспектива нормирована на исходную глубину точки: в покое лицо совпадает
-  // с портретом 1:1, а при повороте ближняя сторона чуть крупнее дальней.
-  float perspective = (4.0 - aTarget.z) / (4.0 - p.z);
+  // Видимость по нормали: лицо гаснет, только когда отворачивается от зрителя,
+  // тыльная сторона появляется, только когда поворачивается к нему.
+  float visibleFront = clamp((n.z + 0.05) / 0.3, 0.0, 1.0);
+  float visibleBack = clamp(n.z / 0.3, 0.0, 1.0);
+  float visible = mix(visibleFront, visibleBack, aNormal.w);
+
+  // Перспектива нормирована на исходную глубину точки лица: в покое лицо
+  // совпадает с портретом 1:1, при повороте ближняя сторона чуть крупнее.
+  float zRest = mix(aTarget.z, 0.0, aNormal.w);
+  float perspective = (5.0 - zRest) / (5.0 - p.z);
   gl_Position = vec4(p.xy * perspective * uViewScale, 0.0, 1.0);
 
   float twinkle = 0.86 + 0.14 * sin(uTime * (0.9 + aSeed.y * 1.4) + phase * 3.0);
   float speech = 1.0 + uLevel * (0.15 + 0.45 * abs(aSeed.w));
-  vAlpha = aSeed.z * twinkle * mix(0.3, 1.0, t) * speech;
+  vAlpha = aSeed.z * twinkle * mix(0.3, 1.0, t) * speech * visible;
   gl_PointSize = uPointSize * (0.55 + aSeed.z * 0.6) * (0.88 + aSeed.y * 0.24);
 }
 `;
@@ -145,14 +165,65 @@ const FACE = {
   chinV: 0.89
 };
 
-// Художественная глубина: голова как сплюснутая спереди сфера + рельеф лица.
-// Ось поворота проходит через z = 0 (центр головы), лицо — спереди.
-function faceDepth(x, y, u, v, aspect) {
-  const ex = x / (aspect * 0.98);
-  const ey = (y + 0.04) / 1.02;
-  const shell = Math.sqrt(Math.max(0, 1 - ex * ex - ey * ey));
-  let z = 0.6 * shell ** 0.6;
+// Профиль головы по силуэту портрета: [y, полуширина без ушей] в координатах
+// головы (y от −1 до 1 — высота кадра). Снят с assets/head/portrait.webp.
+const HEAD_PROFILE = [
+  [0.95, 0.02], [0.89, 0.21], [0.78, 0.38], [0.67, 0.48], [0.56, 0.545],
+  [0.45, 0.567], [0.34, 0.58], [0.2, 0.575], [0.06, 0.565], [-0.1, 0.555],
+  [-0.25, 0.545], [-0.34, 0.53], [-0.44, 0.49], [-0.55, 0.47], [-0.66, 0.4],
+  [-0.77, 0.26], [-0.88, 0.17], [-0.95, 0.02]
+];
 
+function headWidth(y) {
+  if (y >= HEAD_PROFILE[0][0]) return HEAD_PROFILE[0][1];
+  for (let i = 1; i < HEAD_PROFILE.length; i += 1) {
+    const [y1, w1] = HEAD_PROFILE[i];
+    if (y >= y1) {
+      const [y0, w0] = HEAD_PROFILE[i - 1];
+      return w1 + ((y - y1) / (y0 - y1)) * (w0 - w1);
+    }
+  }
+  return HEAD_PROFILE[HEAD_PROFILE.length - 1][1];
+}
+
+// Глубина лицевой половины: лицо почти вертикально от лба до подбородка,
+// к макушке и под подбородком поверхность уходит назад.
+function frontDepth(y) {
+  const base = 0.68;
+  if (y > 0.5) return base * Math.sqrt(Math.max(0.02, 1 - ((y - 0.5) / 0.47) ** 2));
+  if (y < -0.8) return base * Math.sqrt(Math.max(0.02, 1 - ((y + 0.8) / 0.17) ** 2));
+  return base;
+}
+
+// Глубина затылочной половины: затылок круглее и выступает назад сильнее лица.
+function backDepth(y) {
+  return 0.8 * Math.sqrt(Math.max(0.02, 1 - ((y - 0.15) / 0.85) ** 2));
+}
+
+// Наклон нормали вверх у макушки и вниз под подбородком.
+function verticalTilt(y) {
+  if (y > 0.5) return ((y - 0.5) / 0.45) * 0.9;
+  if (y < -0.8) return -((-0.8 - y) / 0.15) * 0.9;
+  return 0;
+}
+
+function normalize3(x, y, z) {
+  const length = Math.hypot(x, y, z) || 1;
+  return [x / length, y / length, z / length];
+}
+
+// Точка лица из портрета: глубина по профилю головы + рельеф лица.
+function frontPoint(x, y, u, v) {
+  const w = headWidth(y);
+  const d = frontDepth(y);
+  const across = Math.max(0, 1 - (x / w) ** 2);
+
+  // Уши и всё за краем силуэта лежат в средней плоскости головы и смотрят вбок.
+  if (across <= 0) {
+    return { z: 0, normal: normalize3(Math.sign(x), 0, 0.3) };
+  }
+
+  let z = d * across ** 0.4;
   const { eyes, noseTip, browV, chinV } = FACE;
   z += 0.14 * gaussian(u, v, noseTip.u, noseTip.v, 0.05, 0.035); // кончик носа
   z += 0.07 * gaussian(u, v, noseTip.u, (browV + noseTip.v) / 2, 0.035, 0.07); // спинка носа
@@ -160,7 +231,13 @@ function faceDepth(x, y, u, v, aspect) {
   for (const eye of eyes) z -= 0.05 * gaussian(u, v, eye.u, eye.v, 0.075, 0.032); // глазницы
   z += 0.035 * gaussian(u, v, MOUTH.centerU, MOUTH.lineV, 0.12, 0.04); // губы
   z += 0.03 * gaussian(u, v, 0.5, chinV, 0.13, 0.05); // подбородок
-  return z;
+
+  // У края силуэта нормаль смотрит вбок; небольшой наклон вперёд оставляет
+  // контур видимым в покое и даёт ему быстро погаснуть, когда сторона уходит назад.
+  const surface = d * Math.sqrt(across);
+  const nx = x / (w * w);
+  const ny = verticalTilt(y);
+  return { z, normal: normalize3(nx, ny, Math.max(surface / (d * d), 0.32 * Math.hypot(nx, ny))) };
 }
 
 // Вес «зрачка»: 1 в центре радужки, быстро спадает к краю.
@@ -231,7 +308,9 @@ function sampleParticles(image, count, scale = 1) {
   // носа, губ, ушей и силуэт. Остаток — тусклые точки кожи, выбранные
   // пропорционально яркости: они дают лёгкую «сетку» на лице, как на портрете,
   // и при этом между точками остаётся видимый чёрный фон.
-  const brightCount = Math.round(count * BRIGHT_SHARE);
+  const frontBudget = Math.round(count * (1 - BACK_SHARE));
+  const backCount = count - frontBudget;
+  const brightCount = Math.round(frontBudget * BRIGHT_SHARE);
   const sorted = Float32Array.from(values).sort();
   const threshold = sorted[Math.max(0, sorted.length - brightCount)];
 
@@ -248,7 +327,7 @@ function sampleParticles(image, count, scale = 1) {
     }
   }
 
-  const dimCount = Math.max(0, count - picks.length);
+  const dimCount = Math.max(0, frontBudget - picks.length);
   if (dimCount > 0 && dimSum > 0) {
     const rate = dimCount / dimSum;
     for (let i = 0; i < dim.length; i += 1) {
@@ -256,21 +335,26 @@ function sampleParticles(image, count, scale = 1) {
     }
   }
 
-  // Перемешиваем, чтобы первые N частиц были равномерной выборкой
-  // (так работает снижение качества на слабых устройствах).
   shuffle(picks, random);
 
-  const total = Math.min(picks.length, count);
+  const frontCount = Math.min(picks.length, frontBudget);
+  const total = frontCount + backCount;
   const target = new Float32Array(total * 3);
   const scatter = new Float32Array(total * 3);
   const seed = new Float32Array(total * 4);
   const eye = new Float32Array(total);
+  const normal = new Float32Array(total * 4);
   const halfHeight = height / 2;
   const aspect = width / height;
 
-  for (let placed = 0; placed < total; placed += 1) {
-    const pixel = pixels[picks[placed]];
-    const luminance = values[picks[placed]];
+  // Лицо и тыльная сторона перемешаны в общем порядке: первые N частиц —
+  // равномерная выборка (так работает снижение качества на слабых устройствах).
+  const order = shuffle(Array.from({ length: total }, (_, i) => i), random);
+
+  for (let index = 0; index < frontCount; index += 1) {
+    const placed = order[index];
+    const pixel = pixels[picks[index]];
+    const luminance = values[picks[index]];
     const px = (pixel % width) + 0.5 + (random() - 0.5) * jitter;
     const py = Math.floor(pixel / width) + 0.5 + (random() - 0.5) * jitter;
     const u = px / width;
@@ -279,8 +363,13 @@ function sampleParticles(image, count, scale = 1) {
     const x = (px - width / 2) / halfHeight;
     const y = -(py - halfHeight) / halfHeight;
 
-    // Художественная глубина: эллипсоид головы плюс лёгкий рельеф по яркости.
-    const z = faceDepth(x, y, u, v, aspect) + (random() - 0.5) * 0.015;
+    const front = frontPoint(x, y, u, v);
+    const z = front.z + (random() - 0.5) * 0.015;
+    const i4n = placed * 4;
+    normal[i4n] = front.normal[0];
+    normal[i4n + 1] = front.normal[1];
+    normal[i4n + 2] = front.normal[2];
+    normal[i4n + 3] = 0;
 
     const i3 = placed * 3;
     target[i3] = x;
@@ -305,7 +394,50 @@ function sampleParticles(image, count, scale = 1) {
     eye[placed] = eyeWeight(u, v);
   }
 
-  return { target, scatter, seed, eye, count: total, aspect };
+  // Тыльная сторона: бока, затылок и макушка — полуэллипсы по профилю головы.
+  // В покое они скрыты (смотрят от зрителя) и появляются при повороте.
+  let backPlaced = 0;
+  let guard = 0;
+  while (backPlaced < backCount && guard < backCount * 20) {
+    guard += 1;
+    const y = -0.42 + random() * (0.95 + 0.42);
+    const w = headWidth(y);
+    const d = backDepth(y);
+    // Больше точек там, где сечение головы шире.
+    if (random() > (w + d) / 1.4) continue;
+
+    const theta = Math.PI + random() * Math.PI; // задняя половина: z ≤ 0
+    const x = w * Math.cos(theta);
+    const z = d * Math.sin(theta);
+    const n = normalize3(Math.cos(theta) / w, verticalTilt(y), Math.sin(theta) / d);
+
+    const placed = order[frontCount + backPlaced];
+    const i3 = placed * 3;
+    target[i3] = x;
+    target[i3 + 1] = y;
+    target[i3 + 2] = z;
+
+    const angle = random() * Math.PI * 2;
+    const spread = 0.35 + random() * 0.75;
+    const push = 1.35 + random() * 0.6;
+    scatter[i3] = x * push + Math.cos(angle) * spread;
+    scatter[i3 + 1] = y * push + Math.sin(angle) * spread;
+    scatter[i3 + 2] = (random() - 0.5) * 1.2;
+
+    const i4 = placed * 4;
+    seed[i4] = random();
+    seed[i4 + 1] = random();
+    seed[i4 + 2] = 0.38 + random() * 0.32;
+    seed[i4 + 3] = 0;
+    eye[placed] = 0;
+    normal[i4] = n[0];
+    normal[i4 + 1] = n[1];
+    normal[i4 + 2] = n[2];
+    normal[i4 + 3] = 1;
+    backPlaced += 1;
+  }
+
+  return { target, scatter, seed, eye, normal, count: frontCount + backPlaced, aspect };
 }
 
 function compileShader(gl, type, source) {
@@ -398,7 +530,8 @@ export function createParticleHead({ figure, poster, getLevel = () => 0 }) {
       ['aTarget', particles.target, 3],
       ['aScatter', particles.scatter, 3],
       ['aSeed', particles.seed, 4],
-      ['aEye', particles.eye, 1]
+      ['aEye', particles.eye, 1],
+      ['aNormal', particles.normal, 4]
     ];
 
     buffers = attributes.map(([name, data, size]) => {
