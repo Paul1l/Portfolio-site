@@ -1,8 +1,9 @@
 // Голова из частиц (WebGL, без зависимостей).
 //
 // Это честный 2.5D-эффект: координаты частиц берутся из яркости пикселей
-// одобренного портрета, а глубина — художественная (эллипсоид + яркость).
-// Настоящей геометрии головы у изображения нет, поэтому повороты маленькие.
+// одобренного портрета, а глубина — художественная: форма головы плюс рельеф
+// лица (нос, глазницы, губы, подбородок). Настоящей геометрии у изображения нет,
+// поэтому угол поворота ограничен — так сохраняется сходство.
 //
 // Вся анимация считается в вершинном шейдере: на каждом кадре JS меняет
 // только несколько uniform-значений и не создаёт новых объектов.
@@ -12,19 +13,26 @@ const ASSEMBLE_SECONDS = 2.2;
 const PORTRAIT_POINTS = 15000;
 // Доля бюджета на самые светлые точки; остальное — тусклая текстура кожи.
 const BRIGHT_SHARE = 0.78;
-const MAX_YAW = 0.13;
-const MAX_PITCH = 0.09;
+// Голова поворачивается к курсору, как портрет, который «смотрит на тебя».
+const MAX_YAW = 0.26; // ≈15°
+const MAX_PITCH = 0.16; // ≈9°
+// На каком расстоянии от головы (px) поворот почти достигает максимума.
+const LOOK_DISTANCE = 420;
+// Насколько зрачки дополнительно сдвигаются в сторону курсора (в долях полувысоты).
+const GAZE_SHIFT = 0.016;
 
 const VERTEX_SHADER = `
 attribute vec3 aTarget;
 attribute vec3 aScatter;
 attribute vec4 aSeed;
+attribute float aEye;
 
 uniform float uTime;
 uniform float uAssemble;
 uniform float uLevel;
 uniform float uPointSize;
 uniform vec2 uRotation;
+uniform vec2 uGaze;
 uniform vec2 uViewScale;
 
 varying float vAlpha;
@@ -50,7 +58,10 @@ void main() {
   // Мягкая пульсация всей головы во время речи.
   p.xy *= 1.0 + uLevel * 0.006 * sin(uTime * 8.0 + phase);
 
-  // Небольшой поворот вокруг центра головы.
+  // Взгляд: зрачки чуть смещаются в сторону курсора.
+  p.xy += aEye * uGaze * ${GAZE_SHIFT.toFixed(4)};
+
+  // Поворот головы вокруг её центра (ось проходит внутри головы, за лицом).
   float cy = cos(uRotation.x);
   float sy = sin(uRotation.x);
   float cx = cos(uRotation.y);
@@ -58,9 +69,10 @@ void main() {
   p = vec3(cy * p.x + sy * p.z, p.y, -sy * p.x + cy * p.z);
   p = vec3(p.x, cx * p.y - sx * p.z, sx * p.y + cx * p.z);
 
-  // Ортографическая проекция: в покое лицо совпадает с портретом 1:1,
-  // глубина проявляется только как небольшой параллакс при повороте.
-  gl_Position = vec4(p.xy * uViewScale, 0.0, 1.0);
+  // Перспектива нормирована на исходную глубину точки: в покое лицо совпадает
+  // с портретом 1:1, а при повороте ближняя сторона чуть крупнее дальней.
+  float perspective = (4.0 - aTarget.z) / (4.0 - p.z);
+  gl_Position = vec4(p.xy * perspective * uViewScale, 0.0, 1.0);
 
   float twinkle = 0.86 + 0.14 * sin(uTime * (0.9 + aSeed.y * 1.4) + phase * 3.0);
   float speech = 1.0 + uLevel * (0.15 + 0.45 * abs(aSeed.w));
@@ -120,6 +132,42 @@ function mouthWeight(u, v) {
   const jawFadeOut = Math.min(Math.max((chinV - v) / 0.12, 0), 1);
   const jaw = 0.5 * Math.exp(-(((u - centerU) / (halfWidth * 1.9)) ** 2)) * jawFadeIn * jawFadeOut;
   return Math.max(lowerLip, jaw) - 0.32 * upperLip;
+}
+
+// Ориентиры лица на портрете (доли ширины и высоты кадра) — для рельефа и взгляда.
+// Если заменить портрет, поправьте их вместе с MOUTH.
+const FACE = {
+  eyes: [{ u: 0.322, v: 0.476 }, { u: 0.63, v: 0.474 }],
+  irisU: 0.022,
+  irisV: 0.016,
+  noseTip: { u: 0.5, v: 0.595 },
+  browV: 0.432,
+  chinV: 0.89
+};
+
+// Художественная глубина: голова как сплюснутая спереди сфера + рельеф лица.
+// Ось поворота проходит через z = 0 (центр головы), лицо — спереди.
+function faceDepth(x, y, u, v, aspect) {
+  const ex = x / (aspect * 0.98);
+  const ey = (y + 0.04) / 1.02;
+  const shell = Math.sqrt(Math.max(0, 1 - ex * ex - ey * ey));
+  let z = 0.6 * shell ** 0.6;
+
+  const { eyes, noseTip, browV, chinV } = FACE;
+  z += 0.14 * gaussian(u, v, noseTip.u, noseTip.v, 0.05, 0.035); // кончик носа
+  z += 0.07 * gaussian(u, v, noseTip.u, (browV + noseTip.v) / 2, 0.035, 0.07); // спинка носа
+  z += 0.03 * gaussian(u, v, 0.5, browV, 0.26, 0.022); // надбровье
+  for (const eye of eyes) z -= 0.05 * gaussian(u, v, eye.u, eye.v, 0.075, 0.032); // глазницы
+  z += 0.035 * gaussian(u, v, MOUTH.centerU, MOUTH.lineV, 0.12, 0.04); // губы
+  z += 0.03 * gaussian(u, v, 0.5, chinV, 0.13, 0.05); // подбородок
+  return z;
+}
+
+// Вес «зрачка»: 1 в центре радужки, быстро спадает к краю.
+function eyeWeight(u, v) {
+  let weight = 0;
+  for (const eye of FACE.eyes) weight = Math.max(weight, gaussian(u, v, eye.u, eye.v, FACE.irisU, FACE.irisV));
+  return weight > 0.05 ? weight : 0;
 }
 
 function detectBudget() {
@@ -216,6 +264,7 @@ function sampleParticles(image, count, scale = 1) {
   const target = new Float32Array(total * 3);
   const scatter = new Float32Array(total * 3);
   const seed = new Float32Array(total * 4);
+  const eye = new Float32Array(total);
   const halfHeight = height / 2;
   const aspect = width / height;
 
@@ -231,10 +280,7 @@ function sampleParticles(image, count, scale = 1) {
     const y = -(py - halfHeight) / halfHeight;
 
     // Художественная глубина: эллипсоид головы плюс лёгкий рельеф по яркости.
-    const ex = x / (aspect * 0.98);
-    const ey = (y + 0.04) / 1.02;
-    const shell = Math.sqrt(Math.max(0, 1 - ex * ex - ey * ey));
-    const z = shell * 0.5 + luminance * 0.05 + (random() - 0.5) * 0.02;
+    const z = faceDepth(x, y, u, v, aspect) + (random() - 0.5) * 0.015;
 
     const i3 = placed * 3;
     target[i3] = x;
@@ -256,9 +302,10 @@ function sampleParticles(image, count, scale = 1) {
       ? 0.5 + 0.5 * Math.min(1, Math.max(0, (luminance - threshold) / (0.85 - threshold))) ** 0.6
       : 0.28 + 0.22 * (luminance / threshold);
     seed[i4 + 3] = mouthWeight(u, v);
+    eye[placed] = eyeWeight(u, v);
   }
 
-  return { target, scatter, seed, count: total, aspect };
+  return { target, scatter, seed, eye, count: total, aspect };
 }
 
 function compileShader(gl, type, source) {
@@ -350,7 +397,8 @@ export function createParticleHead({ figure, poster, getLevel = () => 0 }) {
     const attributes = [
       ['aTarget', particles.target, 3],
       ['aScatter', particles.scatter, 3],
-      ['aSeed', particles.seed, 4]
+      ['aSeed', particles.seed, 4],
+      ['aEye', particles.eye, 1]
     ];
 
     buffers = attributes.map(([name, data, size]) => {
@@ -369,7 +417,8 @@ export function createParticleHead({ figure, poster, getLevel = () => 0 }) {
       level: gl.getUniformLocation(program, 'uLevel'),
       pointSize: gl.getUniformLocation(program, 'uPointSize'),
       rotation: gl.getUniformLocation(program, 'uRotation'),
-      viewScale: gl.getUniformLocation(program, 'uViewScale')
+      viewScale: gl.getUniformLocation(program, 'uViewScale'),
+      gaze: gl.getUniformLocation(program, 'uGaze')
     };
 
     gl.disable(gl.DEPTH_TEST);
@@ -418,14 +467,15 @@ export function createParticleHead({ figure, poster, getLevel = () => 0 }) {
     if (!contextLost) gl.viewport(0, 0, canvasWidth, canvasHeight);
   }
 
+  // Голова «смотрит» на курсор: направление считаем от уровня глаз к курсору,
+  // tanh даёт мягкое насыщение — из любого угла экрана лицо повёрнуто к курсору,
+  // но не дальше MAX_YAW / MAX_PITCH.
   function updatePointerTarget() {
     if (!figureRect) figureRect = figure.getBoundingClientRect();
-    const centerX = figureRect.left + figureRect.width / 2;
-    const centerY = figureRect.top + figureRect.height / 2;
-    const nx = Math.max(-1, Math.min(1, (pointerX - centerX) / (window.innerWidth * 0.5)));
-    const ny = Math.max(-1, Math.min(1, (pointerY - centerY) / (window.innerHeight * 0.5)));
-    targetYaw = nx * MAX_YAW;
-    targetPitch = ny * MAX_PITCH;
+    const eyeX = figureRect.left + figureRect.width / 2;
+    const eyeY = figureRect.top + figureRect.height * FACE.eyes[0].v;
+    targetYaw = Math.tanh((pointerX - eyeX) / LOOK_DISTANCE) * MAX_YAW;
+    targetPitch = Math.tanh((pointerY - eyeY) / LOOK_DISTANCE) * MAX_PITCH;
   }
 
   function onPointerMove(event) {
@@ -467,6 +517,8 @@ export function createParticleHead({ figure, poster, getLevel = () => 0 }) {
     gl.uniform1f(uniforms.level, level);
     gl.uniform1f(uniforms.pointSize, pointSize);
     gl.uniform2f(uniforms.rotation, yaw, pitch);
+    // Взгляд следует за поворотом: x — вправо, y — вверх (в координатах головы).
+    gl.uniform2f(uniforms.gaze, yaw / MAX_YAW, -pitch / MAX_PITCH);
     gl.uniform2f(uniforms.viewScale, viewScaleX, viewScaleY);
     gl.drawArrays(gl.POINTS, 0, drawCount);
   }
