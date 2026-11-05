@@ -25,6 +25,91 @@ export const projects = [
     featured: true
   },
   {
+    slug: 'meatwash',
+    title: 'MEATWASH',
+    subtitle: 'Сайт сети студий мойки и детейлинга в Москве',
+    year: '2026',
+    type: 'Commercial website',
+    categories: ['commercial'],
+    image: 'assets/projects/meatwash.jpg',
+    imageAlt: 'Первый экран сайта MEATWASH',
+    summary:
+      'Действующий сайт на meatwash.ru: услуги и цены по типу кузова, онлайн-запись в одну из двух студий, «До и после» и 3D-гараж услуг.',
+    challenge:
+      'Сайт сети из двух студий должен вести к записи в нужный филиал и показывать цены по типу кузова, а интерактивный 3D не должен замедлять обычный просмотр.',
+    solution:
+      'Статические страницы собираются из общих частей; запись по филиалам, каталог услуг с ценами по типу кузова и шторки «До и после». 3D-гараж (three.js, модель Porsche 930 Turbo) загружается только по кнопке: камера показывает деталь работы, итог считается по ценам каталога.',
+    result:
+      'Сайт работает на meatwash.ru; копия на GitHub Pages обновляется при каждом слиянии в main.',
+    role: 'Frontend · запись по филиалам · 3D-гараж · выкладка',
+    stack: ['HTML', 'CSS', 'JavaScript', 'three.js', 'GitHub Actions'],
+    live: 'https://meatwash.ru/',
+    code: 'https://github.com/Paul1l/MeatWash-v3.0'
+  },
+  {
+    slug: 'kirpich-brand',
+    title: 'Кирпичный трест',
+    subtitle: 'Сайт поставщика строительных материалов и услуг',
+    year: '2026',
+    type: 'Client project / Demo',
+    categories: ['interface'],
+    image: 'assets/projects/kirpich-brand.jpg',
+    imageAlt: 'Первый экран сайта «Кирпичный трест»',
+    summary:
+      'Сайт поставщика из Москвы: 10 направлений материалов и 4 услуги, производители и шоу-румы.',
+    challenge:
+      'Собрать на одном сайте десять направлений материалов и четыре услуги так, чтобы у каждого была своя понятная страница.',
+    solution:
+      'Статический сайт на Astro и TypeScript: 19 страниц, данные направлений вынесены в отдельные файлы. На главной — каталог «стопкой карточек» и сцена, где при прокрутке дом собирается из материалов компании.',
+    result:
+      'Демо-версия опубликована на Vercel и закрыта от индексации до запуска.',
+    role: 'UI · Frontend · анимация',
+    stack: ['Astro', 'TypeScript', 'CSS'],
+    live: 'https://nikolay-brand-stack.vercel.app/'
+  },
+  {
+    slug: 'smesi-sukhie',
+    title: 'Сухие смеси',
+    subtitle: 'Каталог сухих строительных смесей для «Кирпичного треста»',
+    year: '2026',
+    type: 'Client project / Demo',
+    categories: ['interface'],
+    image: 'assets/projects/smesi-sukhie.jpg',
+    imageAlt: 'Первый экран каталога сухих смесей',
+    summary:
+      '134 позиции Perel, Dauer, Основит и других производителей с ценами и характеристиками, подбор смеси по задаче.',
+    challenge:
+      'Каталог дилера с позициями пяти производителей, где назначение и характеристики должны совпадать с данными производителей.',
+    solution:
+      'Astro и TypeScript; данные собраны с карточек производителей и сверены дословно (13 465 цитат, 0 расхождений). Подбор смеси по задаче («Что делаете?»), а на первом экране облако частиц собирается в 3D-витрину упаковок на three.js.',
+    result:
+      'Демо-версия опубликована на Vercel и закрыта от индексации до запуска.',
+    role: 'Данные · UI · Frontend · 3D',
+    stack: ['Astro', 'TypeScript', 'three.js', 'Python'],
+    live: 'https://smesi-sukhie-hero.vercel.app/'
+  },
+  {
+    slug: 'profit-concept',
+    title: 'PROFIT',
+    subtitle: 'Концепт новой главной для маркетингового агентства',
+    year: '2026',
+    type: 'Concept',
+    categories: ['interface'],
+    image: 'assets/projects/profit.jpg',
+    imageAlt: 'Первый экран концепта PROFIT',
+    summary:
+      'Личный концепт редизайна главной страницы агентства: структура и тексты услуг взяты с текущего сайта, подача сделана заново.',
+    challenge:
+      'Сохранить структуру и тексты услуг текущего сайта агентства, но сделать подачу заново — динамичнее и запоминающимся первым экраном.',
+    solution:
+      'Vite и чистый JavaScript, GSAP с ScrollTrigger и Lenis. Видео первого экрана перематывается прокруткой; в 3D-варианте фото «выдавлено» по карте глубины на Three.js. Карточки услуг с 3D-наклоном, спидометр-прогноз и бесконечная лента кейсов.',
+    result:
+      'Концепт опубликован на Vercel как макет для показа: контакты, клиенты и кейсы в нём демонстрационные, страница закрыта от индексации.',
+    role: 'Концепт · UI · анимация · frontend',
+    stack: ['Vite', 'JavaScript', 'GSAP', 'Three.js'],
+    live: 'https://profit-concept.vercel.app/'
+  },
+  {
     slug: 'mpower-service',
     title: 'MPower Service',
     subtitle: 'SPA для независимого BMW-сервиса',
@@ -153,6 +238,66 @@ const projectTranslations = {
       result:
         'The website is live at mb-kuzbass.ru and serves as the company’s main digital storefront.',
       role: 'Structure · UI · Frontend · Content · Launch'
+    },
+    'meatwash': {
+      title: 'MEATWASH',
+      subtitle: 'Website for a Moscow Car Wash and Detailing Studio Network',
+      type: 'Commercial Website',
+      imageAlt: 'Hero section of the MEATWASH website',
+      summary:
+        'A live website at meatwash.ru: services and prices by body type, online booking at one of two studios, before-and-after comparisons, and a 3D service garage.',
+      challenge:
+        'A two-studio network needed a website that leads to booking at the right location and shows prices by body type, while interactive 3D must not slow down regular browsing.',
+      solution:
+        'Static pages assembled from shared partials; per-location booking, a service catalog with body-type pricing, and before-and-after sliders. The 3D garage (three.js, a Porsche 930 Turbo model) loads only on request: the camera highlights the area of work and the total is calculated from catalog prices.',
+      result:
+        'The website is live at meatwash.ru; a GitHub Pages copy updates on every merge into main.',
+      role: 'Frontend · Location Booking · 3D Garage · Deployment'
+    },
+    'kirpich-brand': {
+      title: 'Kirpichny Trest',
+      subtitle: 'Website for a Building Materials and Services Supplier',
+      type: 'Client Project / Demo',
+      imageAlt: 'Hero section of the Kirpichny Trest website',
+      summary:
+        'A Moscow supplier website: 10 material categories and 4 services, manufacturers, and showrooms.',
+      challenge:
+        'Bring ten material categories and four services together on one website, each with its own clear page.',
+      solution:
+        'A static Astro and TypeScript website with 19 pages and category data kept in separate files. The homepage features a stacked-card catalog and a scroll scene where a house assembles from the materials the company sells.',
+      result:
+        'The demo is published on Vercel and kept out of search indexing until launch.',
+      role: 'UI · Frontend · Animation'
+    },
+    'smesi-sukhie': {
+      title: 'Dry Mixes',
+      subtitle: 'Dry Building Mix Catalog for Kirpichny Trest',
+      type: 'Client Project / Demo',
+      imageAlt: 'Hero section of the dry mix catalog',
+      summary:
+        '134 products from Perel, Dauer, Osnovit, and other manufacturers with prices and specifications, plus a task-based product finder.',
+      challenge:
+        'A dealer catalog with products from five manufacturers, where purposes and specifications must match the manufacturers’ data.',
+      solution:
+        'Astro and TypeScript; data collected from manufacturer product pages and verified verbatim (13,465 quotes, 0 mismatches). A task-based finder, and a hero where a particle cloud assembles into a 3D package showcase built with three.js.',
+      result:
+        'The demo is published on Vercel and kept out of search indexing until launch.',
+      role: 'Data · UI · Frontend · 3D'
+    },
+    'profit-concept': {
+      title: 'PROFIT',
+      subtitle: 'Homepage Concept for a Marketing Agency',
+      type: 'Concept',
+      imageAlt: 'Hero section of the PROFIT concept',
+      summary:
+        'A personal redesign concept for an agency homepage: the service structure and copy come from the current website, the presentation is new.',
+      challenge:
+        'Keep the structure and service copy of the agency’s current website while reimagining the presentation with more energy and a memorable first screen.',
+      solution:
+        'Vite and vanilla JavaScript with GSAP, ScrollTrigger, and Lenis. The hero video scrubs with scrolling; a 3D variant extrudes the photo along a depth map with Three.js. Service cards tilt in 3D, plus a speedometer forecast and an endless case carousel.',
+      result:
+        'The concept is published on Vercel as a showcase mockup: contacts, clients, and cases are placeholders, and the page is kept out of search indexing.',
+      role: 'Concept · UI · Animation · Frontend'
     },
     'mpower-service': {
       title: 'MPower Service',
