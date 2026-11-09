@@ -13,6 +13,7 @@
 const ASSEMBLE_SECONDS = 2.2;
 // Бюджет частиц на desktop: столько самых светлых пикселей портрета становятся точками.
 const PORTRAIT_POINTS = 15000;
+const MOBILE_POINTS = 12000;
 // Доля бюджета на самые светлые точки; остальное — тусклая текстура кожи.
 const BRIGHT_SHARE = 0.78;
 // Доля бюджета на тыльную сторону головы (бока, затылок) — видна только при повороте.
@@ -256,12 +257,17 @@ function detectBudget() {
 
   if (saveData || cores <= 2 || memory <= 1) return null;
 
-  let count = coarse || narrow ? 6000 : PORTRAIT_POINTS;
-  if (cores <= 4 || memory <= 2) count = Math.round(count * 0.7);
+  // На телефоне голова меньше, поэтому точек нужно больше на единицу площади
+  // и холст в полном разрешении экрана — иначе глаза и губы растворяются.
+  // iPhone в Safari сообщает 4 ядра, поэтому по ядрам бюджет не режем:
+  // на слабом устройстве его уменьшит adaptQuality по реальной частоте кадров.
+  const small = coarse || narrow;
+  let count = small ? MOBILE_POINTS : PORTRAIT_POINTS;
+  if (memory <= 2) count = Math.round(count * 0.75);
 
   return {
     count,
-    maxDpr: coarse || narrow ? 1.5 : 2
+    maxDpr: small ? 3 : 2
   };
 }
 
