@@ -110,28 +110,6 @@ export const projects = [
     live: 'https://profit-concept.vercel.app/'
   },
   {
-    slug: 'mpower-service',
-    title: 'MPower Service',
-    subtitle: 'SPA для независимого BMW-сервиса',
-    year: '2026',
-    type: 'React / Service landing',
-    categories: ['spa', 'interface'],
-    image: 'assets/projects/mpower.webp',
-    imageAlt: 'Темный интерфейс сайта автосервиса MPower',
-    summary:
-      'Сервисный лендинг с сильной типографикой, понятным сценарием записи и формой, которая готовит обращение для Telegram.',
-    challenge:
-      'Показать техническую компетентность сервиса без стандартной автомобильной визуальной перегрузки и провести клиента от симптома к записи.',
-    solution:
-      'Собрал компонентный React-интерфейс, адаптивную сетку услуг, четыре этапа работы, валидацию заявки и юридические модальные окна.',
-    result:
-      'Готовая production-сборка для GitHub Pages с SEO-файлами и отдельными desktop/mobile-макетами.',
-    role: 'UI · React-разработка · адаптив',
-    stack: ['React', 'Vite', 'CSS', 'Forms'],
-    live: 'https://paul1l.github.io/M_Power-service/',
-    code: 'https://github.com/Paul1l/M_Power-service'
-  },
-  {
     slug: 'fullstack-landing',
     title: 'REON Fullstack Landing',
     subtitle: 'Форма, серверные API и AI-сценарий',
@@ -151,28 +129,6 @@ export const projects = [
     role: 'Frontend · API · валидация · документация',
     stack: ['JavaScript', 'Node.js', 'REST API', 'Resend', 'OpenAI API'],
     code: 'https://github.com/Paul1l/Fullstack-landing'
-  },
-  {
-    slug: 'techbearing',
-    title: 'TechBearing',
-    subtitle: 'Каталог технической продукции',
-    year: '2026',
-    type: 'Catalog / Vanilla JS',
-    categories: ['interface'],
-    image: 'assets/projects/techbearing.jpg',
-    imageAlt: 'Интерфейс каталога TechBearing',
-    summary:
-      'B2B/B2C-каталог с фильтрацией, поиском, заявками и демонстрационной админкой для управления товарами.',
-    challenge:
-      'Уместить разные группы технической продукции в быстрый статический сайт и дать пользователю удобный подбор без backend.',
-    solution:
-      'Сделал каталог, поиск и фильтры на чистом JavaScript. Для демонстрации работы с данными добавил заявки, товары и админку на localStorage.',
-    result:
-      'Лёгкий GitHub Pages-проект без зависимостей, с юридическими страницами и сохранением пользовательских настроек.',
-    role: 'Структура · UI · JavaScript',
-    stack: ['HTML', 'CSS', 'JavaScript', 'localStorage'],
-    live: 'https://paul1l.github.io/TechBearing/',
-    code: 'https://github.com/Paul1l/TechBearing'
   },
   {
     slug: 'lawyer-landing',
@@ -299,21 +255,6 @@ const projectTranslations = {
         'The concept is published on Vercel as a showcase mockup: contacts, clients, and cases are placeholders, and the page is kept out of search indexing.',
       role: 'Concept · UI · Animation · Frontend'
     },
-    'mpower-service': {
-      title: 'MPower Service',
-      subtitle: 'SPA for an Independent BMW Service Center',
-      type: 'React / Service Landing Page',
-      imageAlt: 'Dark interface of the MPower auto service website',
-      summary:
-        'A service landing page with strong typography, a clear booking flow, and a form that prepares an enquiry for Telegram.',
-      challenge:
-        'Present the service center’s technical expertise without the visual clutter common to automotive websites, and guide a customer from a symptom to a booking.',
-      solution:
-        'I built a component-based React interface, a responsive service grid, a four-step workflow, enquiry validation, and legal modal dialogs.',
-      result:
-        'A production-ready GitHub Pages build with SEO files and dedicated desktop and mobile layouts.',
-      role: 'UI · React Development · Responsive Design'
-    },
     'fullstack-landing': {
       title: 'REON Fullstack Landing',
       subtitle: 'Form, Server-side APIs, and an AI Workflow',
@@ -328,21 +269,6 @@ const projectTranslations = {
       result:
         'The project can be deployed to Vercel and tested locally with its built-in verification script.',
       role: 'Frontend · API · Validation · Documentation'
-    },
-    techbearing: {
-      title: 'TechBearing',
-      subtitle: 'Technical Product Catalog',
-      type: 'Catalog / Vanilla JavaScript',
-      imageAlt: 'TechBearing catalog interface',
-      summary:
-        'A B2B/B2C catalog with filters, search, enquiries, and a demo admin area for managing products.',
-      challenge:
-        'Fit several groups of technical products into a fast static website and give users a convenient way to find the right item without a backend.',
-      solution:
-        'I built the catalog, search, and filters in vanilla JavaScript. To demonstrate data handling, I added enquiries, product management, and a localStorage-based admin area.',
-      result:
-        'A lightweight, dependency-free GitHub Pages project with legal pages and persisted user preferences.',
-      role: 'Structure · UI · JavaScript'
     },
     'lawyer-landing': {
       title: 'Alexey Kazantsev',

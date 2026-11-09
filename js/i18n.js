@@ -73,18 +73,10 @@ const english = {
       subtitle: 'Homepage concept for a marketing agency',
       summary: 'A personal redesign concept: the hero video scrubs with scrolling, a 3D variant uses a depth map, plus animated service cards and a case carousel. Contacts and cases in the mockup are placeholders.'
     },
-    mpower: {
-      subtitle: 'SPA for an independent BMW service center',
-      summary: 'A service landing page with a clear booking journey and a form that prepares an enquiry for Telegram.'
-    },
     reon: {
       type: 'Full-stack / Test project · 2026',
       subtitle: 'Form, server-side APIs, and an AI workflow',
       summary: 'The interface connects to server-side functions: an email enquiry, validation, and an AI-generated task summary.'
-    },
-    techbearing: {
-      subtitle: 'Technical product catalog',
-      summary: 'A catalog with search, filters, enquiries, and a demo admin panel for managing products.'
     },
     lawyer: {
       title: 'Alexey Kazantsev',
@@ -380,9 +372,7 @@ function createSchemaController() {
       const descriptions = [
         'A commercial React SPA showcasing spare parts and vehicles.',
         'A website for a Moscow car wash and detailing studio network with online booking and a 3D service garage.',
-        'A React SPA for an independent BMW service center.',
-        'A full-stack project with server-side APIs, an email enquiry flow, and an AI workflow.',
-        'A technical product catalog built with vanilla JavaScript.'
+        'A full-stack project with server-side APIs, an email enquiry flow, and an AI workflow.'
       ];
 
       projectList.name = 'Selected Work by Pavel Orekhov';
