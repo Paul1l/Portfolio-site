@@ -1,0 +1,46 @@
+/* Блок brief-form — форма заявки (js/modules/brief-form.js). */
+
+.brief-form {
+  display: grid;
+  gap: 22px;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--color-line);
+}
+
+/* Ловушка для ботов: человек это поле не видит и не заполняет. */
+.brief-form__honeypot {
+  position: absolute !important;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.brief-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brief-form__note {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.brief-form__status {
+  font-size: 0.9375rem;
+}
+
+.brief-form__status:empty {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .brief-form {
+    padding: 20px;
+  }
+
+  .brief-form__action {
+    flex: 1 1 100%;
+  }
+}

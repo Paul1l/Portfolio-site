@@ -1,0 +1,13 @@
+/* Блок about — раздел «Обо мне»: несколько абзацев, факты и ссылка на GitHub. */
+
+.about__text {
+  display: grid;
+  gap: 20px;
+  max-width: 44rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.about__paragraph--muted {
+  color: var(--color-muted);
+}

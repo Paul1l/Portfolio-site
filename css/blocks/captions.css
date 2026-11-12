@@ -1,0 +1,120 @@
+/*
+  Блок captions — субтитры под головой, как в Reels или на YouTube:
+  фраза набирается по буквам, держится пару секунд и сменяется следующей
+  (js/modules/portrait-captions.js). Под текстом — кнопка паузы / повтора.
+
+  Модификаторы блока:
+    --paused   — набор остановлен кнопкой или вне экрана;
+    --finished — все фразы показаны, кнопка стала «повторить».
+*/
+
+.captions {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 26rem;
+  margin-top: clamp(10px, 2vh, 22px);
+  text-align: center;
+}
+
+/* Место под две строки зарезервировано: страница не прыгает, пока набирается текст. */
+.captions__line {
+  min-height: calc(2 * 1.35em);
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  transition: opacity 0.25s ease;
+}
+
+/* Фраза дочитана — гаснет перед следующей. */
+.captions__line--fading {
+  opacity: 0;
+}
+
+.captions__caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 3px;
+  vertical-align: -0.16em;
+  background: currentColor;
+  animation: captions-caret-blink 1s steps(1) infinite;
+}
+
+.captions--paused .captions__caret {
+  animation: none;
+}
+
+.captions--finished .captions__caret {
+  visibility: hidden;
+}
+
+/* Кнопка: видимый круг 36 px, область нажатия 44 px. */
+.captions__control {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  transition: color 0.2s ease;
+}
+
+.captions__control::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  transition: border-color 0.2s ease;
+}
+
+.captions__control:hover {
+  color: var(--color-text);
+}
+
+.captions__control:hover::before {
+  border-color: var(--color-text);
+}
+
+.captions__icon {
+  grid-area: 1 / 1;
+  width: 10px;
+  height: 12px;
+}
+
+/* Иконка зависит от действия кнопки: пауза, продолжить или повторить. */
+.captions__control--pause .captions__icon {
+  background: linear-gradient(to right, currentColor 0 35%, transparent 35% 65%, currentColor 65%);
+}
+
+.captions__control--play .captions__icon {
+  margin-left: 2px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.captions__control--replay .captions__icon {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+@keyframes captions-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 359px) {
+  .captions__line {
+    min-height: calc(3 * 1.35em);
+  }
+}

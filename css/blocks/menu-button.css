@@ -1,0 +1,42 @@
+/* Блок menu-button — «бургер» мобильного меню. Модификатор --open превращает полоски в крестик. */
+
+.menu-button {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.menu-button__line {
+  position: absolute;
+  left: 11px;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-text);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.menu-button__line--top {
+  top: 18px;
+}
+
+.menu-button__line--bottom {
+  top: 25px;
+}
+
+.menu-button--open .menu-button__line--top {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.menu-button--open .menu-button__line--bottom {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+@media (max-width: 767px) {
+  .menu-button {
+    display: block;
+  }
+}

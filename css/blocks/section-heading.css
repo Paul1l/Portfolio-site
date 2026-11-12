@@ -1,0 +1,28 @@
+/*
+  Блок section-heading — шапка раздела: номер, заголовок и подводка.
+  Модификатор --flush убирает нижний отступ (когда заголовок стоит сбоку от текста).
+*/
+
+.section-heading {
+  display: grid;
+  gap: 16px;
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+
+.section-heading--flush {
+  margin-bottom: 0;
+}
+
+.section-heading__title {
+  max-width: 18ch;
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+
+.section-heading__text {
+  max-width: 38rem;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+}

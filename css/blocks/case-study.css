@@ -1,0 +1,128 @@
+/*
+  Блок case-study — содержимое окна с кейсом: шапка с картинкой,
+  три колонки «Задача / Что сделал / Что получилось» и подвал со стеком и ссылками.
+  Разметку собирает js/modules/case-dialog.js из данных js/data/projects.js.
+*/
+
+.case-study__header {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.case-study__intro {
+  display: grid;
+  gap: 16px;
+}
+
+.case-study__eyebrow {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.case-study__title {
+  font-size: clamp(2rem, 1rem + 3vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.case-study__summary {
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+}
+
+.case-study__picture {
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+}
+
+.case-study__image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+}
+
+.case-study__details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px clamp(20px, 3vw, 40px);
+  margin-top: clamp(32px, 4vw, 56px);
+}
+
+.case-study__detail {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-line);
+}
+
+.case-study__detail-label {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.case-study__detail-text {
+  line-height: 1.6;
+}
+
+.case-study__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 32px;
+  margin-top: clamp(32px, 4vw, 48px);
+  padding-top: 24px;
+  border-top: 1px solid var(--color-line);
+}
+
+.case-study__role-label {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.case-study__role {
+  font-weight: 400;
+}
+
+.case-study__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.case-study__tag {
+  padding: 5px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.case-study__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-width: 1023px) {
+  .case-study__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .case-study__details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,132 @@
+/*
+  Блок work-deck — «колода» превью работ (js/modules/work-deck.js, экраны от 768 px).
+  Превью стоят стопкой на ребре; при прокрутке передняя карточка опрокидывается
+  вперёд «на пол», а следующая выходит вперёд. Пока колода выключена, у неё
+  атрибут hidden.
+
+  Модификаторы карточки:
+    --front  — карточка впереди, в цвете;
+    --fallen — пройденная карточка лежит «на полу»;
+    --hidden — карточка погасла и больше не рисуется.
+*/
+
+.work-deck {
+  position: sticky;
+  top: var(--header-height);
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  height: calc(100svh - var(--header-height));
+}
+
+.work-deck__stage {
+  position: relative;
+  width: min(100%, calc((100svh - var(--header-height) - 120px) * 16 / 15));
+  margin-inline: auto;
+  aspect-ratio: 16 / 15;
+  perspective: 1500px;
+  perspective-origin: 50% -10%;
+  cursor: pointer;
+}
+
+.work-deck__card {
+  position: absolute;
+  top: 16%;
+  right: 3%;
+  left: 3%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  background: var(--color-surface);
+  transform-origin: 50% 100%;
+  pointer-events: none; /* клики принимает сцена, а упавшая карточка не перекрывает кнопки */
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.25, 1), opacity 0.5s ease;
+}
+
+/* Затемнение задних и упавших карточек — оттенком фона, без цвета.
+   Насколько темнее, скрипт передаёт через --card-shade (0…1). */
+.work-deck__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-background);
+  opacity: var(--card-shade, 0);
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.work-deck__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(1);
+  transition: filter 0.6s ease;
+}
+
+.work-deck__card--front {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.work-deck__card--front .work-deck__image {
+  filter: none;
+}
+
+/* Погасшие карточки не рисуем вовсе — после того как они плавно исчезли. */
+.work-deck__card--hidden {
+  visibility: hidden;
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.25, 1), opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+/* Карточка «на полу» лежит вверх ногами: верх картинки уходит в тень. */
+.work-deck__card--fallen::after {
+  background: linear-gradient(to bottom, var(--color-background) 8%, rgba(5, 5, 5, 0.55) 100%);
+  opacity: 1;
+}
+
+.work-deck__controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.work-deck__button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.work-deck__button:hover:not(:disabled) {
+  border-color: var(--color-text);
+}
+
+.work-deck__button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.work-deck__counter {
+  min-width: 7ch;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+.work-deck__counter-current {
+  color: var(--color-text);
+}

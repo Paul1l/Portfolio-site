@@ -1,0 +1,15 @@
+/* Блок section — раздел страницы с вертикальными отступами и линией-разделителем сверху. */
+
+.section {
+  padding-block: var(--section-spacing);
+}
+
+/* Соседние разделы разделены линией в пределах полей страницы, а не двойным отступом. */
+.section + .section {
+  padding-top: 0;
+}
+
+.section + .section > .container {
+  padding-top: var(--section-spacing);
+  background: linear-gradient(var(--color-line), var(--color-line)) no-repeat top / calc(100% - 2 * var(--page-padding)) 1px;
+}

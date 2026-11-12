@@ -1,0 +1,115 @@
+/* Блок project-card — карточка работы: превью, номер, название, описание, ссылки. */
+
+.project-card {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+  padding-block: clamp(28px, 4vw, 56px);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.project-card__visual {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.project-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: filter 0.6s ease, transform 0.9s var(--ease-out);
+}
+
+/* С мышью превью чёрно-белые и оживают при наведении. На тач-экранах — сразу в цвете. */
+@media (hover: hover) and (pointer: fine) {
+  .project-card__image {
+    filter: grayscale(1) contrast(1.04);
+  }
+
+  .project-card:hover .project-card__image,
+  .project-card:focus-within .project-card__image {
+    filter: none;
+    transform: scale(1.015);
+  }
+}
+
+.project-card__body {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.project-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.project-card__number {
+  color: var(--color-text);
+}
+
+.project-card__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: clamp(1.75rem, 1rem + 2vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+/* Метка «Live» — сайт работает у заказчика. */
+.project-card__badge {
+  padding: 5px 10px 4px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.project-card__subtitle {
+  font-size: 1.0625rem;
+}
+
+.project-card__summary {
+  max-width: 34rem;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.project-card__tags {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+}
+
+.project-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+  margin-top: 4px;
+}
+
+@media (max-width: 1023px) {
+  .project-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .project-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

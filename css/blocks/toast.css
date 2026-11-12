@@ -1,0 +1,24 @@
+/* Блок toast — короткое уведомление внизу экрана (js/modules/toast.js). */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  z-index: 60;
+  max-width: min(92vw, 28rem);
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-background);
+  font-size: 0.9375rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out);
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

@@ -1,0 +1,50 @@
+/* Блок site-footer — подвал: логотип, одна строка о себе, ссылки и копирайт. */
+
+.site-footer__inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px 40px;
+  align-items: center;
+  padding-block: 32px 40px;
+  background: linear-gradient(var(--color-line), var(--color-line)) no-repeat top / calc(100% - 2 * var(--page-padding)) 1px;
+}
+
+.site-footer__text,
+.site-footer__copyright {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+}
+
+.site-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.site-footer__link:hover {
+  color: var(--color-muted);
+}
+
+.site-footer__copyright {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 767px) {
+  .site-footer__inner {
+    grid-template-columns: minmax(0, 1fr);
+    /* Снизу место под плавающую кнопку «Написать». */
+    padding-bottom: 96px;
+  }
+}

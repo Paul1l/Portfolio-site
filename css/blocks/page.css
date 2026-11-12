@@ -1,0 +1,17 @@
+/* Блок page — <body>: фон, шрифт и состояния всей страницы. */
+
+.page {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Открыто мобильное меню — страница под ним не прокручивается. */
+.page--menu-open {
+  overflow: hidden;
+}

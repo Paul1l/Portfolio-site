@@ -1,0 +1,45 @@
+/*
+  Блок showcase — витрина избранных работ.
+  По умолчанию это список карточек с превью. На экранах от 768 px скрипт
+  (js/modules/work-deck.js) ставит модификатор --deck: слева появляется
+  «колода» превью, справа остаются описания, активное — ярким.
+*/
+
+.showcase__list {
+  border-top: 1px solid var(--color-line);
+}
+
+.showcase--deck {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 5vw, 88px);
+  align-items: start;
+}
+
+.showcase--deck .showcase__list {
+  border-top: 0;
+}
+
+.showcase--deck .showcase__item {
+  display: flex;
+  align-items: center;
+  min-height: 64svh;
+  padding-block: 0;
+  border-bottom: 0;
+  transition: opacity 0.5s ease;
+}
+
+.showcase--deck .showcase__item:not(.showcase__item--active) {
+  opacity: 0.28;
+}
+
+/* В режиме колоды превью показывает колода, у самих карточек они скрыты. */
+.showcase--deck .showcase__visual {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .showcase--deck {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}

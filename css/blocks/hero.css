@@ -1,0 +1,147 @@
+/*
+  Блок hero — первый экран: заголовок слева, голова с субтитрами по центру,
+  короткое описание справа и полоса «01 — Знакомство» снизу.
+*/
+
+.hero {
+  /* Холст частиц шире портрета — не даём ему создать горизонтальную прокрутку. */
+  overflow: hidden;
+  overflow: clip;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 3fr);
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "intro center aside"
+    "bar bar bar";
+  column-gap: clamp(24px, 3vw, 48px);
+  min-height: calc(100svh - var(--header-height));
+  padding-top: clamp(20px, 3.5vh, 40px);
+}
+
+.hero__intro {
+  grid-area: intro;
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  container-type: inline-size;
+}
+
+.hero__eyebrow {
+  margin-bottom: clamp(16px, 2.4vh, 28px);
+}
+
+.hero__title {
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-size: clamp(2rem, 13cqi, 4.25rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  overflow-wrap: break-word;
+}
+
+.hero__center {
+  grid-area: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.hero__aside {
+  grid-area: aside;
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  padding-left: clamp(0px, 3vw, 48px);
+  container-type: inline-size;
+}
+
+.hero__lead {
+  margin-bottom: clamp(16px, 2.6vh, 32px);
+  font-size: clamp(1.0625rem, 1.8vw, 1.75rem);
+  font-size: clamp(1.0625rem, 6.4cqi, 1.75rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.hero__bar {
+  grid-area: bar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: clamp(16px, 2.6vh, 32px);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.hero__scroll-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.hero__scroll-link:hover {
+  color: var(--color-muted);
+}
+
+/* Планшет: голова справа, текст слева в две строки сетки. */
+@media (max-width: 1023px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "intro center"
+      "aside center"
+      "bar bar";
+    min-height: 0;
+    row-gap: 28px;
+    padding-top: 40px;
+  }
+
+  .hero__intro {
+    align-self: end;
+  }
+
+  .hero__aside {
+    align-self: start;
+    padding-left: 0;
+  }
+
+  .hero__title {
+    font-size: clamp(2.25rem, 12cqi, 3.5rem);
+  }
+
+  .hero__lead {
+    font-size: clamp(1.0625rem, 5.5cqi, 1.375rem);
+  }
+}
+
+/* Телефон: всё в одну колонку. */
+@media (max-width: 767px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "center"
+      "aside"
+      "bar";
+    row-gap: 24px;
+    padding-top: 32px;
+  }
+
+  .hero__title {
+    font-size: clamp(2.25rem, 10.5vw, 3rem);
+  }
+
+  .hero__lead {
+    font-size: 1.125rem;
+  }
+}

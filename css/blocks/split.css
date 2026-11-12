@@ -1,0 +1,14 @@
+/* Блок split — две колонки 5 : 7 (заголовок слева, содержимое справа). На планшете и телефоне — одна колонка. */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: start;
+}
+
+@media (max-width: 1023px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
