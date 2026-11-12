@@ -1,0 +1,21 @@
+/* Блок contact — раздел «Контакты»: слева призыв и прямые контакты, справа форма. */
+
+.contact__info {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+}
+
+.contact__title {
+  max-width: 16ch;
+  font-size: clamp(2.25rem, 1.2rem + 3.2vw, 4.25rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.contact__intro {
+  max-width: 34rem;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+}

@@ -1,0 +1,48 @@
+/* Блок process — четыре шага работы в ряд (на планшете по два, на телефоне в столбик). */
+
+.process {
+  margin-top: clamp(56px, 7vw, 104px);
+}
+
+.process__steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px clamp(20px, 3vw, 40px);
+  margin-top: 24px;
+}
+
+.process__step {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-line);
+}
+
+.process__number {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+}
+
+.process__step-title {
+  font-size: 1.1875rem;
+  font-weight: 400;
+}
+
+.process__step-text {
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 1023px) {
+  .process__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .process__steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

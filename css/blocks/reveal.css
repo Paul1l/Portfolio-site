@@ -1,0 +1,24 @@
+/*
+  Блок reveal — плавное появление при прокрутке (js/modules/reveal-on-scroll.js).
+  Пока скрипт не подключился (класс page--reveal-ready), всё видно сразу:
+  без JavaScript содержимое не прячется.
+*/
+
+.page--reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-out);
+}
+
+.page--reveal-ready .reveal--visible,
+.page--reveal-ready .reveal:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page--reveal-ready .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

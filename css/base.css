@@ -1,0 +1,141 @@
+/*
+  База: дизайн-токены, сброс браузерных стилей и пара вспомогательных классов.
+  Всё, что относится к конкретному блоку, лежит в css/blocks/<имя-блока>.css.
+*/
+
+:root {
+  /* Цвета: строгий монохром */
+  --color-background: #050505;
+  --color-surface: #0b0b0b;
+  --color-text: #f2f2f2;
+  --color-text-bright: #ffffff;
+  --color-muted: #a0a0a0;
+  --color-line: #303030;
+  --color-field-border: #616161; /* контраст с фоном не меньше 3:1 */
+  --color-placeholder: #8c8c8c;
+  --color-backdrop: rgba(0, 0, 0, 0.82);
+
+  --font-family-base: "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Сетка страницы */
+  --container-max-width: 1440px;
+  --page-padding: clamp(20px, 5vw, 64px);
+  --header-height: 64px;
+  --section-spacing: clamp(72px, 9vw, 136px);
+
+  /* Движение */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: 60px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Линия раздела прячется под линией шапки — после перехода по якорю нет двойной черты. */
+  scroll-padding-top: calc(var(--header-height) - 1px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (max-width: 767px) {
+  html {
+    /* Плавающая кнопка «Написать» не должна закрывать элемент в фокусе. */
+    scroll-padding-bottom: 84px;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+::selection {
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Текст только для скринридеров. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

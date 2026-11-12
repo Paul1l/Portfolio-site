@@ -1,0 +1,21 @@
+/* Блок text-link — подчёркнутая текстовая ссылка (или кнопка, которая выглядит как ссылка). */
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.text-link:hover {
+  text-decoration-color: var(--color-muted);
+}

@@ -1,0 +1,53 @@
+/* Блок field — подпись и поле ввода: строка, выпадающий список или многострочный текст. */
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field__label {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.field__control {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-field-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.field__control::placeholder {
+  color: var(--color-placeholder);
+}
+
+.field__control:hover,
+.field__control:focus {
+  border-bottom-color: var(--color-muted);
+}
+
+.field__control--textarea {
+  resize: vertical;
+  min-height: 112px;
+  line-height: 1.5;
+}
+
+.field__control--select {
+  appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23a0a0a0' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+}
+
+/* Варианты списка в тёмной теме: иначе некоторые браузеры рисуют белый фон. */
+.field__control--select option {
+  background: var(--color-background);
+  color: var(--color-text);
+}

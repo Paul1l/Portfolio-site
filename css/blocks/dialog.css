@@ -1,0 +1,63 @@
+/*
+  Блок dialog — модальное окно на нативном <dialog>: кейс работы или текст
+  о персональных данных. Модификатор --narrow — узкое окно для текста.
+*/
+
+.dialog {
+  width: min(calc(100% - 2 * var(--page-padding)), 1120px);
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-text);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.dialog--narrow {
+  width: min(calc(100% - 2 * var(--page-padding)), 640px);
+}
+
+.dialog::backdrop {
+  background: var(--color-backdrop);
+}
+
+.dialog__body {
+  position: relative;
+  padding: clamp(24px, 4vw, 56px);
+}
+
+.dialog__body--text {
+  display: grid;
+  gap: 16px;
+  color: var(--color-muted);
+}
+
+/* Кнопка закрытия «прилипает» к верху и видна при прокрутке длинного кейса. */
+.dialog__close {
+  position: sticky;
+  top: 12px;
+  z-index: 2;
+  display: grid;
+  margin: -8px -8px 8px auto;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  background: var(--color-surface);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.dialog__close:hover {
+  border-color: var(--color-text);
+}
+
+.dialog__title {
+  color: var(--color-text);
+  font-size: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  font-weight: 400;
+  line-height: 1.15;
+}

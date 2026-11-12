@@ -1,0 +1,24 @@
+/* Блок language-switch — переключатель «RU / EN». Текущий язык яркий, второй приглушён. */
+
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+}
+
+.language-switch__separator,
+.language-switch__next {
+  color: var(--color-muted);
+}
+
+.language-switch:hover .language-switch__next {
+  color: var(--color-text);
+}

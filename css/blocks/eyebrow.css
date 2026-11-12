@@ -1,0 +1,20 @@
+/* Блок eyebrow — мелкая надпись капслоком над заголовком или у поля. */
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.eyebrow--muted {
+  color: var(--color-muted);
+}
+
+@media (max-width: 767px) {
+  .eyebrow--compact {
+    letter-spacing: 0.18em;
+  }
+}

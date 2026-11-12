@@ -1,0 +1,40 @@
+/*
+  Блок mobile-cta — плавающая кнопка «Написать» внизу экрана телефона.
+  Появляется после первого экрана (модификатор --visible) и прячется,
+  когда на экране контакты или подвал (js/modules/mobile-cta.js).
+*/
+
+.mobile-cta {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-cta {
+    position: fixed;
+    right: var(--page-padding);
+    bottom: 16px;
+    left: var(--page-padding);
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    border-radius: 999px;
+    background: var(--color-text);
+    color: var(--color-background);
+    font-weight: 500;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s var(--ease-out), visibility 0s linear 0.25s;
+  }
+
+  .mobile-cta--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.25s ease, transform 0.25s var(--ease-out), visibility 0s;
+  }
+}

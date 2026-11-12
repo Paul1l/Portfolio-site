@@ -1,0 +1,51 @@
+/*
+  Блок button — кнопка-«таблетка».
+  Модификаторы: --primary (светлая заливка), --outline (только рамка), --wide (шире поля).
+*/
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.button--primary {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+.button--primary:hover {
+  background: var(--color-text-bright);
+}
+
+.button--outline {
+  border-color: var(--color-muted);
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.button--outline:hover {
+  border-color: var(--color-text);
+}
+
+.button--wide {
+  margin-top: 8px;
+  padding-inline: 34px;
+}
